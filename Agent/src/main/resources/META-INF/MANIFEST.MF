@@ -1,0 +1,2 @@
+Premain-Class: com.github.sulir.runtimesearch.agent.SearchAgent
+Boot-Class-Path: ./searchagent-1.0-SNAPSHOT.jar
