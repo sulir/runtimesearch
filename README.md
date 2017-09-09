@@ -5,7 +5,7 @@ RuntimeSearch is a debugger extension which searches the given text in the value
 ## Video
 
 <video width="960" height="540" controls>
-  <source src="video.mp4" type="video/mp4">
+  <source src="docs/video.mp4" type="video/mp4">
 </video>
 
 ## Building
