@@ -1,6 +1,7 @@
 .idea/libraries/
+.idea/vcs.xml
 .idea/workspace.xml
 */target/
 */dependency-reduced-pom.xml
-Agent/Agent.iml
+Agent/*.iml
 Plugin/Plugin.jar
