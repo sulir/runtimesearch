@@ -1,0 +1,21 @@
+dependencies {
+    compile 'org.javassist:javassist:3.26.0-GA'
+    compile 'org.jetbrains:annotations:15.0'
+}
+
+jar {
+    manifest {
+        attributes(
+            'Premain-Class': 'com.github.sulir.runtimesearch.agent.SearchAgent',
+            'Boot-Class-Path': archiveFileName
+        )
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    destinationDir project.file('../dist')
+}
+
+clean {
+    delete jar.archiveFile
+}

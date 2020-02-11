@@ -1,0 +1,20 @@
+plugins {
+    id 'org.jetbrains.intellij' version '0.4.16'
+}
+
+intellij {
+    version '2019.3.2'
+    plugins = ['java']
+}
+
+patchPluginXml {
+    changeNotes 'This is an early alpha version. An official release will come soon.'
+}
+
+buildPlugin {
+    destinationDir project.file('../dist')
+}
+
+clean {
+    delete buildPlugin.archiveFile
+}

@@ -94,7 +94,7 @@ public class RuntimeFindManager {
     private void sendSearchStringSocket() {
         try (
             Socket client = new Socket(InetAddress.getLoopbackAddress(), PORT);
-            ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream());
+            ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream())
         ) {
             output.writeObject(searchText.isEmpty() ? null : searchText);
         } catch (IOException e) {

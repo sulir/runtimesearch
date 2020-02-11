@@ -1,20 +1,13 @@
 <idea-plugin>
-    <id>com.github.sulir.runtimesearch.plugin</id>
+    <id>com.github.sulir.runtimesearch</id>
     <name>RuntimeSearch</name>
-    <version>1.0-SNAPSHOT</version>
-    <vendor>(Anonymized)</vendor>
+    <vendor>Matúš Sulír</vendor>
 
     <description><![CDATA[
         RuntimeSearch searches for occurrences of strings in a running program.
     ]]>
     </description>
 
-    <change-notes><![CDATA[
-        This is an early alpha version (1.0-SNAPSHOT).
-    ]]>
-    </change-notes>
-
-    <idea-version since-build="171"/>
     <depends>com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">

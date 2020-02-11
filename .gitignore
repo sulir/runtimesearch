@@ -1,7 +1,4 @@
-.idea/libraries/
-.idea/vcs.xml
-.idea/workspace.xml
-*/target/
-*/dependency-reduced-pom.xml
-Agent/*.iml
-Plugin/Plugin.jar
+.gradle/
+.idea/
+dist/
+/*/build/

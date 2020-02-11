@@ -1,0 +1,4 @@
+rootProject.name = 'RuntimeSearch'
+include 'agent', 'plugin'
+project(':agent').name = 'runtimesearch-agent'
+project(':plugin').name = 'runtimesearch-plugin'
