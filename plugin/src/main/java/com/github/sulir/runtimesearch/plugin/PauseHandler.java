@@ -1,7 +1,6 @@
 package com.github.sulir.runtimesearch.plugin;
 
-import com.intellij.debugger.DebuggerManagerEx;
-import com.intellij.debugger.impl.DebuggerManagerAdapter;
+import com.intellij.debugger.impl.DebuggerManagerListener;
 import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.AbstractProjectComponent;
@@ -14,16 +13,13 @@ public class PauseHandler extends AbstractProjectComponent {
     private static final String INITIALIZE = CLASS + "#initialize(";
     private static final String FOUND = CLASS + "#perform(";
 
-    private DebuggerManagerEx manager;
-
-    public PauseHandler(Project project, DebuggerManagerEx manager) {
+    public PauseHandler(Project project) {
         super(project);
-        this.manager = manager;
     }
 
     @Override
     public void projectOpened() {
-        manager.addDebuggerManagerListener(new DebuggerManagerAdapter() {
+        myProject.getMessageBus().connect().subscribe(DebuggerManagerListener.TOPIC, new DebuggerManagerListener() {
             @Override
             public void sessionAttached(DebuggerSession session) {
                 XDebugSession xSession = session.getXDebugSession();
