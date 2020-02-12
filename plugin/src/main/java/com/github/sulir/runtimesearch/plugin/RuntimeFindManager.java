@@ -1,9 +1,14 @@
 package com.github.sulir.runtimesearch.plugin;
 
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionPlaces;
-import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.execution.ExecutionException;
+import com.intellij.execution.Executor;
+import com.intellij.execution.RunManager;
+import com.intellij.execution.RunnerAndConfigurationSettings;
+import com.intellij.execution.executors.DefaultDebugExecutor;
+import com.intellij.execution.runners.ExecutionEnvironmentBuilder;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
@@ -23,8 +28,9 @@ public class RuntimeFindManager {
     public static final int PORT = 4321;
     private static final String SEND_VALUE = "Class.forName(\"com.github.sulir.runtimesearch" +
             ".runtime.Check\").getDeclaredField(\"searchValue\").set(null, %s)";
+    private static final String NOTIFICATION_GROUP = "RuntimeSearch";
 
-    private Project project;
+    private final Project project;
     private RuntimeFindForm form;
     private String searchText = "";
 
@@ -69,13 +75,24 @@ public class RuntimeFindManager {
     }
 
     public void startDebugging() {
-        AnActionEvent actionEvent = AnActionEvent.createFromDataContext(ActionPlaces.UNKNOWN,
-                null, DataManager.getInstance().getDataContextFromFocus().getResult());
-        ActionManager.getInstance().getAction("Debug").actionPerformed(actionEvent);
+        RunnerAndConfigurationSettings selected = RunManager.getInstance(project).getSelectedConfiguration();
+
+        if (selected != null) {
+            try {
+                Executor executor = DefaultDebugExecutor.getDebugExecutorInstance();
+                ExecutionEnvironmentBuilder.create(executor, selected.getConfiguration()).buildAndExecute();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Notifications.Bus.notify(new Notification(NOTIFICATION_GROUP, "Cannot start debugging",
+                    "No run configuration selected", NotificationType.ERROR));
+        }
     }
 
     public void sendSearchStringExpression(XDebugSession session) {
         XDebuggerEvaluator evaluator = session.getDebugProcess().getEvaluator();
+        assert evaluator != null;
         String searchString = searchText.isEmpty() ? "null"
                 : '"' + StringEscapeUtils.escapeJava(searchText) + '"';
         String expression = String.format(SEND_VALUE, searchString);

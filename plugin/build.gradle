@@ -5,10 +5,11 @@ plugins {
 intellij {
     version '2019.3.2'
     plugins = ['java']
+    updateSinceUntilBuild = false
 }
 
 patchPluginXml {
-    changeNotes 'This is an early alpha version. An official release will come soon.'
+    changeNotes = 'This is an early alpha version. An official release will come soon.'
 }
 
 buildPlugin {
