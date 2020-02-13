@@ -13,7 +13,9 @@ public class Check {
     public static void initialize() {
         try {
             throw new BreakpointError();
-        } catch (BreakpointError e) { }
+        } catch (BreakpointError e) {
+            // exception thrown to trigger a breakpoint in the IDE
+        }
     }
 
     public static void runServer() {
@@ -50,7 +52,9 @@ public class Check {
                 try {
                     searchValue = null;
                     throw new BreakpointError();
-                } catch (BreakpointError e) { }
+                } catch (BreakpointError e) {
+                    // exception thrown to trigger a breakpoint in the IDE
+                }
             }
         }
     }
