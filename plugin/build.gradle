@@ -3,7 +3,7 @@ plugins {
 }
 
 intellij {
-    version '2019.3.2'
+    version '2019.3.3'
     plugins = ['java']
     updateSinceUntilBuild = false
 }
