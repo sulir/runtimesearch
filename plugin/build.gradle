@@ -1,11 +1,12 @@
 plugins {
-    id 'org.jetbrains.intellij' version '0.4.16'
+    id 'org.jetbrains.intellij' version '0.4.18'
 }
 
 intellij {
-    version '2019.3.3'
+    version '2020.1'
     plugins = ['java']
     updateSinceUntilBuild = false
+    buildSearchableOptions.enabled = false
 }
 
 patchPluginXml {

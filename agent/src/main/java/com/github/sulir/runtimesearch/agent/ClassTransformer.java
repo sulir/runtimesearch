@@ -1,27 +1,37 @@
 package com.github.sulir.runtimesearch.agent;
 
-import javassist.*;
-
-import java.io.ByteArrayInputStream;
+import org.objectweb.asm.*;
+import org.objectweb.asm.tree.MethodNode;
 
 public class ClassTransformer {
-    private final ClassPool pool;
+    private final byte[] bytes;
 
-    public ClassTransformer(ClassLoader loader) {
-        pool = new ClassPool(true);
-        pool.appendClassPath(new LoaderClassPath(loader));
+    public ClassTransformer(byte[] bytes) {
+        this.bytes = bytes;
     }
 
-    public byte[] transform(byte[] classBytes) throws Exception {
-        CtClass clazz = pool.makeClass(new ByteArrayInputStream(classBytes));
-        BytecodeTransformer bytecodeTransformer = new BytecodeTransformer(clazz);
-        ExpressionTransformer expressionTransformer = new ExpressionTransformer(clazz);
+    public byte[] transform() {
+        ClassReader reader = new ClassReader(bytes);
+        ClassWriter writer = new ClassWriter(reader, ClassWriter.COMPUTE_MAXS);
 
-        for (CtBehavior method : clazz.getDeclaredBehaviors()) {
-            bytecodeTransformer.instrument(method);
-            expressionTransformer.instrument(method);
-        }
+        ClassVisitor classVisitor = new ClassVisitor(Opcodes.ASM7, writer) {
+            @Override
+            public MethodVisitor visitMethod(int access, String name, String desc,
+                                             String signature, String[] exceptions) {
+                MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);
+                return new MethodNode(Opcodes.ASM7, access, name, desc, signature, exceptions) {
+                    @Override
+                    public void visitEnd() {
+                        if (instructions.size() != 0 && (access & Opcodes.ACC_SYNTHETIC) == 0)
+                            new MethodTransformer(this).transform();
 
-        return clazz.toBytecode();
+                        accept(methodVisitor);
+                    }
+                };
+            }
+        };
+
+        reader.accept(classVisitor, 0);
+        return writer.toByteArray();
     }
 }
