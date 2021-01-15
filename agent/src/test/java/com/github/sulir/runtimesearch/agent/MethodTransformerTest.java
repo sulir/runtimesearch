@@ -17,7 +17,7 @@ public class MethodTransformerTest {
         LabelNode end = new LabelNode(new Label());
         VarInsnNode aload1 = new VarInsnNode(Opcodes.ALOAD, 1);
 
-        MethodNode method = new MethodNode(Opcodes.ASM7);
+        MethodNode method = new MethodNode(Opcodes.ACC_PUBLIC, "test", "()V", null, null);
         LocalVariableNode variable = new LocalVariableNode("var", "Ljava/lang/String;", null, start, end, 1);
         method.localVariables = Collections.singletonList(variable);
 
