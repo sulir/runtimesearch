@@ -14,9 +14,10 @@ jar {
         )
     }
     from {
+        exclude '**/module-info.class'
         configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-    destinationDir project.file('../dist')
+    destinationDirectory = project.file('../dist')
 }
 
 clean {

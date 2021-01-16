@@ -14,7 +14,7 @@ patchPluginXml {
 }
 
 buildPlugin {
-    destinationDir project.file('../dist')
+    destinationDirectory = project.file('../dist')
 }
 
 clean {
