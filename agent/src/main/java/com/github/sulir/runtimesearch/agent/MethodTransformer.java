@@ -2,6 +2,7 @@ package com.github.sulir.runtimesearch.agent;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
+import org.objectweb.asm.tree.analysis.AnalyzerException;
 
 public class MethodTransformer {
     private final MethodNode method;
@@ -12,17 +13,17 @@ public class MethodTransformer {
         this.instructions = method.instructions;
     }
 
-    public void transform() {
-        VariableMap variableMap = new VariableMap();
-        variableMap.addVariables(method.localVariables);
+    public void transform() throws AnalyzerException {
+        StackAnalyzer analyzer = new StackAnalyzer(method);
+        analyzer.analyze();
 
+        int i = 0;
         for (AbstractInsnNode instruction : instructions) {
-            if (instruction.getType() == AbstractInsnNode.LABEL) {
-                variableMap.updateScope(((LabelNode) instruction).getLabel());
-            } else if (instruction.getOpcode() == Opcodes.ALOAD) {
-                if (variableMap.isSearchable(((VarInsnNode) instruction).var))
+            if (instruction.getOpcode() == Opcodes.ALOAD) {
+                if (analyzer.getStackTopAfter(i) != null && analyzer.getStackTopAfter(i).isReference())
                     instructions.insert(instruction, generateInstrumentation());
             }
+            i++;
         }
     }
 

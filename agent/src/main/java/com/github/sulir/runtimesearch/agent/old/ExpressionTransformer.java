@@ -1,4 +1,4 @@
-package com.github.sulir.runtimesearch.agent;
+package com.github.sulir.runtimesearch.agent.old;
 
 import javassist.CannotCompileException;
 import javassist.CtBehavior;

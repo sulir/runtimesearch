@@ -2,6 +2,7 @@ package com.github.sulir.runtimesearch.agent;
 
 import org.objectweb.asm.*;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.analysis.AnalyzerException;
 
 public class ClassTransformer {
     public static final int ASM_VERSION = Opcodes.ASM9;
@@ -24,8 +25,12 @@ public class ClassTransformer {
                 return new MethodNode(ASM_VERSION, access, name, desc, signature, exceptions) {
                     @Override
                     public void visitEnd() {
-                        if (instructions.size() != 0 && (access & Opcodes.ACC_SYNTHETIC) == 0)
-                            new MethodTransformer(this).transform();
+                        try {
+                            if (instructions.size() != 0 && (access & Opcodes.ACC_SYNTHETIC) == 0)
+                                new MethodTransformer(this).transform();
+                        } catch (AnalyzerException e) {
+                            e.printStackTrace();
+                        }
 
                         accept(methodVisitor);
                     }
