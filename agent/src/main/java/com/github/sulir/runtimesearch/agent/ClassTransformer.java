@@ -7,9 +7,11 @@ import org.objectweb.asm.tree.analysis.AnalyzerException;
 public class ClassTransformer {
     public static final int ASM_VERSION = Opcodes.ASM9;
 
+    private final String className;
     private final byte[] bytes;
 
-    public ClassTransformer(byte[] bytes) {
+    public ClassTransformer(String className, byte[] bytes) {
+        this.className = className;
         this.bytes = bytes;
     }
 
@@ -27,7 +29,7 @@ public class ClassTransformer {
                     public void visitEnd() {
                         try {
                             if (instructions.size() != 0 && (access & Opcodes.ACC_SYNTHETIC) == 0)
-                                new MethodTransformer(this).transform();
+                                new MethodTransformer(className, this).transform();
                         } catch (AnalyzerException e) {
                             e.printStackTrace();
                         }

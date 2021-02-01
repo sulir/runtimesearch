@@ -22,7 +22,7 @@ public class SearchAgent {
                     ProtectionDomain protectionDomain, byte[] classfileBuffer) {
                 try {
                     if (className != null && shouldInstrument.matcher(className).matches()) {
-                        ClassTransformer transformer = new ClassTransformer(classfileBuffer);
+                        ClassTransformer transformer = new ClassTransformer(className, classfileBuffer);
                         return transformer.transform();
                     }
                 } catch (Throwable e) {
