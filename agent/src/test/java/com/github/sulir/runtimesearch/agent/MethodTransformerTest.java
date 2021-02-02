@@ -14,16 +14,15 @@ public class MethodTransformerTest {
     private final VarInsnNode aload = new VarInsnNode(Opcodes.ALOAD, 1);
     private final InsnNode pop = new InsnNode(Opcodes.POP);
     private final InsnNode ret = new InsnNode(Opcodes.RETURN);
+    private final ComparableInstruction dup = new ComparableInstruction(Opcodes.DUP);
+    private final ComparableInstruction invokestatic = new ComparableInstruction(Opcodes.INVOKESTATIC);
 
     @Test
-    public void stringAloadIsInstrumented() throws AnalyzerException {
+    public void stringLdcAndAloadAreInstrumented() throws AnalyzerException {
         SimpleMethod method = new SimpleMethod(ldc, astore, aload, pop, ret);
         new MethodTransformer(method.getClassName(), method).transform();
 
-        Object[] expectedResult = new Object[] {ldc, astore, aload,
-                new ComparableInstruction(Opcodes.DUP),
-                new ComparableInstruction(Opcodes.INVOKESTATIC),
-                pop, ret};
+        Object[] expectedResult = new Object[] {ldc, dup, invokestatic, astore, aload, dup, invokestatic, pop, ret};
         assertArrayEquals(expectedResult, method.getInstructions());
     }
 

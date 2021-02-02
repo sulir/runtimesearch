@@ -6,7 +6,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 
-public class MethodTransformer {
+public class MethodTransformer implements Opcodes {
     private final String className;
     private final MethodNode method;
     private final InsnList instructions;
@@ -23,20 +23,48 @@ public class MethodTransformer {
 
         int i = 0;
         for (AbstractInsnNode instruction : instructions) {
-            if (instruction.getOpcode() == Opcodes.ALOAD) {
-                if (analyzer.getStackTopAfter(i) == StringValue.MAYBE_STRING)
-                    instructions.insert(instruction, generateInstrumentation());
+            if (analyzer.getStackTopAfter(i) == StringValue.MAYBE_STRING) {
+                switch (instruction.getOpcode()) {
+                    case LDC:
+                    case ALOAD:
+                    case AALOAD:
+                    case GETSTATIC:
+                    case GETFIELD:
+                    case INVOKEVIRTUAL:
+                    case INVOKESPECIAL:
+                    case INVOKESTATIC:
+                    case INVOKEINTERFACE:
+                    case INVOKEDYNAMIC:
+                        instructions.insert(instruction, generateInstrumentation());
+                        break;
+                    case NEW:
+                        instructions.insert(instruction, generateDup());
+                }
+            } else if (instruction.getOpcode() == INVOKESPECIAL) {
+                MethodInsnNode invokespecial = (MethodInsnNode) instruction;
+
+                if (invokespecial.owner.equals("java/lang/String") && invokespecial.name.equals("<init>"))
+                    instructions.insert(instruction, generateInvokestatic());
             }
+
             i++;
         }
+    }
+
+    private AbstractInsnNode generateDup() {
+        return new InsnNode(Opcodes.DUP);
+    }
+
+    private AbstractInsnNode generateInvokestatic() {
+        return new MethodInsnNode(Opcodes.INVOKESTATIC, "com/github/sulir/runtimesearch/runtime/Check",
+                "perform", "(Ljava/lang/Object;)V");
     }
 
     private InsnList generateInstrumentation() {
         InsnList instructions = new InsnList();
 
-        instructions.add(new InsnNode(Opcodes.DUP));
-        instructions.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/github/sulir/runtimesearch/runtime/Check",
-                "perform", "(Ljava/lang/Object;)V"));
+        instructions.add(generateDup());
+        instructions.add(generateInvokestatic());
 
         return instructions;
     }

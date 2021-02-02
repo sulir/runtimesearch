@@ -8,7 +8,7 @@ public class Benchmark {
     private static long startTime;
     private static long totalTime;
 
-    static  {
+    static {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 if (startTime != 0)
