@@ -1,6 +1,7 @@
 package com.github.sulir.runtimesearch.agent.analyzer;
 
 import com.github.sulir.runtimesearch.agent.ClassTransformer;
+import com.github.sulir.runtimesearch.agent.ObjectType;
 import org.objectweb.asm.ConstantDynamic;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -17,8 +18,6 @@ import java.util.List;
  * values.
  */
 public class IsStringInterpreter extends Interpreter<StringValue> implements Opcodes {
-    private static final String STRING_TYPE = "java.lang.String";
-
     private final BasicInterpreter basicInterpreter = new BasicInterpreter();
 
     public IsStringInterpreter() {
@@ -37,16 +36,10 @@ public class IsStringInterpreter extends Interpreter<StringValue> implements Opc
             case Type.DOUBLE:
                 return StringValue.LONG_OR_DOUBLE;
             case Type.OBJECT:
-                switch (type.getClassName()) {
-                    case STRING_TYPE:
-                    case "java.lang.Object":
-                    case "java.io.Serializable":
-                    case "java.lang.Comparable":
-                    case "java.lang.CharSequence":
-                        return StringValue.MAYBE_STRING;
-                    default:
-                        return StringValue.OTHER;
-                }
+                if (new ObjectType(type).canBeString())
+                    return StringValue.MAYBE_STRING;
+                else
+                    return StringValue.OTHER;
             case Type.ARRAY:
                 if (newValue(type.getElementType()) == StringValue.MAYBE_STRING)
                     return StringValue.newMaybeStringArray(type.getDimensions());
@@ -79,7 +72,7 @@ public class IsStringInterpreter extends Interpreter<StringValue> implements Opc
                 return newValue(Type.getType(((FieldInsnNode) insn).desc));
             case NEW:
                 String internalName = ((TypeInsnNode) insn).desc;
-                if (Type.getObjectType(internalName).getClassName().equals(STRING_TYPE))
+                if (internalName.equals(ObjectType.STRING))
                     return StringValue.MAYBE_STRING;
                 else
                     return StringValue.OTHER;
