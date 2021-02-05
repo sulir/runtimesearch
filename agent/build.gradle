@@ -2,8 +2,6 @@ dependencies {
     implementation 'org.ow2.asm:asm:9.0'
     implementation 'org.ow2.asm:asm-tree:9.0'
     implementation 'org.ow2.asm:asm-analysis:9.0'
-    implementation 'org.javassist:javassist:3.26.0-GA'
-    implementation 'org.jetbrains:annotations:20.1.0'
 }
 
 jar {
