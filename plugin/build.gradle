@@ -1,11 +1,12 @@
 plugins {
-    id 'org.jetbrains.intellij' version '0.4.16'
+    id 'org.jetbrains.intellij' version '0.6.5'
 }
 
 intellij {
-    version '2019.3.3'
+    version '2020.3.2'
     plugins = ['java']
     updateSinceUntilBuild = false
+    buildSearchableOptions.enabled = false
 }
 
 patchPluginXml {
@@ -13,7 +14,11 @@ patchPluginXml {
 }
 
 buildPlugin {
-    destinationDir project.file('../dist')
+    destinationDirectory = project.file('../dist')
+}
+
+runIde {
+    jvmArgs '--add-exports', 'java.base/jdk.internal.vm=ALL-UNNAMED'
 }
 
 clean {
