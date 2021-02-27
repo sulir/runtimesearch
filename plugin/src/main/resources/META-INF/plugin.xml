@@ -12,17 +12,19 @@
     <depends>com.intellij.modules.java</depends>
 
     <actions>
-        <action id="RuntimeFind" class="com.github.sulir.runtimesearch.plugin.RuntimeFindAction"
-                text="Find in Runtime..." description="Find a string in a running program">
-            <add-to-group group-id="GoToMenu" anchor="after" relative-to-action="GoToMenuEx" />
-            <keyboard-shortcut keymap="$default" first-keystroke="shift alt F2" />
-        </action>
-        <action id="RuntimeFindNext" class="com.github.sulir.runtimesearch.plugin.RuntimeFindNextAction"
-                text="Find Next in Runtime"
-                description="Find the next occurrence of the searched string in a running program">
-            <add-to-group group-id="GoToMenu" anchor="after" relative-to-action="GoToMenuEx" />
-            <keyboard-shortcut keymap="$default" first-keystroke="shift alt F3" />
-        </action>
+        <group>
+            <separator />
+            <action id="RuntimeFind" class="com.github.sulir.runtimesearch.plugin.RuntimeFindAction"
+                    text="Find in Runtime..." description="Find a string in a running program">
+                <keyboard-shortcut keymap="$default" first-keystroke="shift alt F2" />
+            </action>
+            <action id="RuntimeFindNext" class="com.github.sulir.runtimesearch.plugin.RuntimeFindNextAction"
+                    text="Find Next in Runtime"
+                    description="Find the next occurrence of the searched string in a running program">
+                <keyboard-shortcut keymap="$default" first-keystroke="shift alt F3" />
+            </action>
+            <add-to-group group-id="GoToMenu" anchor="last" />
+        </group>
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
