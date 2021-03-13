@@ -4,23 +4,21 @@
     <vendor>Matúš Sulír</vendor>
 
     <description><![CDATA[
-        RuntimeSearch searches for occurrences of strings in a running program.
+        Searches for occurrences of strings in a running program.
     ]]>
     </description>
 
     <idea-version since-build="201.6668.113"/>
     <depends>com.intellij.modules.java</depends>
+    <resource-bundle>messages</resource-bundle>
 
     <actions>
         <group id="RuntimeSearchMenu">
             <separator/>
-            <action id="RuntimeFind" class="com.github.sulir.runtimesearch.plugin.RuntimeFindAction"
-                    text="Find in Runtime..." description="Find a string in a running program">
+            <action id="RuntimeFind" class="com.github.sulir.runtimesearch.plugin.RuntimeFindAction">
                 <keyboard-shortcut keymap="$default" first-keystroke="shift alt F2"/>
             </action>
-            <action id="RuntimeFindNext" class="com.github.sulir.runtimesearch.plugin.RuntimeFindNextAction"
-                    text="Find Next in Runtime"
-                    description="Find the next occurrence of the searched string in a running program">
+            <action id="RuntimeFindNext" class="com.github.sulir.runtimesearch.plugin.RuntimeFindNextAction">
                 <keyboard-shortcut keymap="$default" first-keystroke="shift alt F3"/>
             </action>
             <add-to-group group-id="GoToMenu" anchor="last"/>
@@ -37,5 +35,4 @@
         <listener class="com.github.sulir.runtimesearch.plugin.PauseHandler"
                   topic="com.intellij.debugger.impl.DebuggerManagerListener"/>
     </projectListeners>
-
 </idea-plugin>

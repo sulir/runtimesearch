@@ -1,5 +1,6 @@
 package com.github.sulir.runtimesearch.plugin.config;
 
+import com.github.sulir.runtimesearch.plugin.Messages;
 import com.intellij.debugger.ui.PatternFilterEditor;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.openapi.options.SettingsEditor;
@@ -11,8 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 
 public class RuntimeSearchSettingsEditor extends SettingsEditor<RunConfigurationBase<?>> {
-    private static final String DEFAULT_INCLUDE = "By default, everything except JDK, IntelliJ runtime, " +
-            "and RuntimeSearch's code is included.";
+    private static final String DEFAULT_INCLUDE = Messages.get("settings.include.empty");
 
     private JPanel mainPanel;
     private JCheckBox enabledCheckBox;

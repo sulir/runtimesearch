@@ -26,9 +26,9 @@ public class RuntimeFindForm {
         if (popup == null || popup.isDisposed()) {
             ComponentPopupBuilder builder = JBPopupFactory.getInstance()
                     .createComponentPopupBuilder(panel, searchField);
-            IconButton cancelButton = new IconButton("Cancel", AllIcons.Actions.Close,
+            IconButton cancelButton = new IconButton(Messages.get("find.close"), AllIcons.Actions.Close,
                     AllIcons.Actions.CloseHovered);
-            popup = builder.setTitle("Find in Runtime:")
+            popup = builder.setTitle(Messages.get("find.title"))
                     .setMovable(true)
                     .setRequestFocus(true)
                     .setCancelOnClickOutside(false)

@@ -80,8 +80,8 @@ public class RuntimeFindManager {
             Executor debugExecutor = DefaultDebugExecutor.getDebugExecutorInstance();
             ProgramRunnerUtil.executeConfiguration(selected, debugExecutor);
         } else {
-            Notifications.Bus.notify(new Notification(NOTIFICATION_GROUP, "Cannot start debugging",
-                    "No run/debug configuration selected", NotificationType.ERROR));
+            Notifications.Bus.notify(new Notification(NOTIFICATION_GROUP, Messages.get("error.no.config.title"),
+                    Messages.get("error.no.config.content"), NotificationType.ERROR));
         }
     }
 
