@@ -8,11 +8,11 @@
     ]]>
     </description>
 
-    <idea-version since-build="193.6015"/>
+    <idea-version since-build="201.6668.113"/>
     <depends>com.intellij.modules.java</depends>
 
     <actions>
-        <group>
+        <group id="RuntimeSearchMenu">
             <separator/>
             <action id="RuntimeFind" class="com.github.sulir.runtimesearch.plugin.RuntimeFindAction"
                     text="Find in Runtime..." description="Find a string in a running program">
@@ -29,6 +29,8 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <projectService serviceImplementation="com.github.sulir.runtimesearch.plugin.RuntimeFindManager"/>
+        <runConfigurationExtension
+                implementation="com.github.sulir.runtimesearch.plugin.config.RuntimeSearchRunConfigExtension"/>
     </extensions>
 
     <projectListeners>

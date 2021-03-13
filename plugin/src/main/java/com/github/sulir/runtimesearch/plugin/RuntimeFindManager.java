@@ -1,11 +1,10 @@
 package com.github.sulir.runtimesearch.plugin;
 
-import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
+import com.intellij.execution.ProgramRunnerUtil;
 import com.intellij.execution.RunManager;
 import com.intellij.execution.RunnerAndConfigurationSettings;
 import com.intellij.execution.executors.DefaultDebugExecutor;
-import com.intellij.execution.runners.ExecutionEnvironmentBuilder;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
@@ -78,15 +77,11 @@ public class RuntimeFindManager {
         RunnerAndConfigurationSettings selected = RunManager.getInstance(project).getSelectedConfiguration();
 
         if (selected != null) {
-            try {
-                Executor executor = DefaultDebugExecutor.getDebugExecutorInstance();
-                ExecutionEnvironmentBuilder.create(executor, selected.getConfiguration()).buildAndExecute();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
+            Executor debugExecutor = DefaultDebugExecutor.getDebugExecutorInstance();
+            ProgramRunnerUtil.executeConfiguration(selected, debugExecutor);
         } else {
             Notifications.Bus.notify(new Notification(NOTIFICATION_GROUP, "Cannot start debugging",
-                    "No run configuration selected", NotificationType.ERROR));
+                    "No run/debug configuration selected", NotificationType.ERROR));
         }
     }
 

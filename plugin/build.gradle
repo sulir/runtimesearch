@@ -13,8 +13,15 @@ patchPluginXml {
     changeNotes = 'This is an early alpha version. An official release will come soon.'
 }
 
+dependencies {
+     runtimeOnly(project(':runtimesearch-agent')) {
+         transitive = false
+     }
+}
+
 buildPlugin {
     destinationDirectory = project.file('../dist')
+    archiveFileName = "${project.name}.zip"
 }
 
 runIde {

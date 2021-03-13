@@ -10,7 +10,7 @@ To build both the Java agent and the IDE plugin, run the command:
 
 ## Running
 
-1. To open IntelliJ IDEA with the plugin, use the command: `./gradlew runIde`
-2. In the Run/Debug Configuration of the program to be instrumented, add a VM option: `-javaagent:$RUNTIMESEARCH_PATH/dist/runtimesearch-agent-1.0-SNAPSHOT.jar=$INSTRUMENT_REGEX`, where `$RUNTIMESEARCH_PATH` is the root path of RuntimeSearch source code and `$INSTRUMENT_REGEX` is a regular expression matching all classes which should be instrumented. These class names use slashes instead of dots (e.g., `com/company/.*`)
+1. To open IntelliJ IDEA with the plugin, type the command: `./gradlew runIde`
+2. Open the Run/Debug Configuration you would like to use. In the "RuntimeSearch Settings" tab/section, check "Enable RuntimeSearch for this configuration". You can also restrict the search scope to selected packages or classes.
 3. Add a helper breakpoint: Run > View Breakpoints > "+" > Java Exception Breakpoints, type "UnknownError", press OK.
 4. Debug the program, use Navigate / Find in Runtime, etc.
