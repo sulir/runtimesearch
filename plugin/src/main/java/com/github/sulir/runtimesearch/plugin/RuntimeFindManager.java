@@ -1,10 +1,14 @@
 package com.github.sulir.runtimesearch.plugin;
 
+import com.github.sulir.runtimesearch.plugin.config.RuntimeSearchSettings;
+import com.intellij.debugger.engine.JavaValue;
 import com.intellij.execution.Executor;
 import com.intellij.execution.ProgramRunnerUtil;
 import com.intellij.execution.RunManager;
 import com.intellij.execution.RunnerAndConfigurationSettings;
+import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.executors.DefaultDebugExecutor;
+import com.intellij.execution.impl.EditConfigurationsDialog;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
@@ -75,14 +79,21 @@ public class RuntimeFindManager {
 
     public void startDebugging() {
         RunnerAndConfigurationSettings selected = RunManager.getInstance(project).getSelectedConfiguration();
-
-        if (selected != null) {
-            Executor debugExecutor = DefaultDebugExecutor.getDebugExecutorInstance();
-            ProgramRunnerUtil.executeConfiguration(selected, debugExecutor);
-        } else {
+        if (selected == null || !(selected.getConfiguration() instanceof RunConfigurationBase)) {
             Notifications.Bus.notify(new Notification(NOTIFICATION_GROUP, Messages.get("error.no.config.title"),
                     Messages.get("error.no.config.content"), NotificationType.ERROR));
+            return;
         }
+
+        RunConfigurationBase<?> configuration = (RunConfigurationBase<?>) selected.getConfiguration();
+        RuntimeSearchSettings settings = RuntimeSearchSettings.getOrCreate(configuration);
+        if (!settings.isEnabled()) {
+            offerToEnable();
+            return;
+        }
+
+        Executor debugExecutor = DefaultDebugExecutor.getDebugExecutorInstance();
+        ProgramRunnerUtil.executeConfiguration(selected, debugExecutor);
     }
 
     public void sendSearchStringExpression(XDebugSession session) {
@@ -95,7 +106,12 @@ public class RuntimeFindManager {
         evaluator.evaluate(expression, new XDebuggerEvaluator.XEvaluationCallback() {
             @Override
             public void evaluated(@NotNull XValue result) {
-                ApplicationManager.getApplication().invokeLater(session::resume);
+                String resultType = ((JavaValue) result).getTypeName();
+                if (resultType != null && resultType.equals("java.lang.ClassNotFoundException")) {
+                    offerToEnable();
+                } else {
+                    ApplicationManager.getApplication().invokeLater(session::resume);
+                }
             }
 
             @Override
@@ -110,7 +126,20 @@ public class RuntimeFindManager {
         ) {
             output.writeObject(searchText.isEmpty() ? null : searchText);
         } catch (IOException e) {
-            e.printStackTrace();
+            offerToEnable();
         }
+    }
+
+    private void offerToEnable() {
+        Notification notification = new Notification(NOTIFICATION_GROUP, Messages.get("error.disabled.title"),
+                Messages.get("error.disabled.content"), NotificationType.WARNING);
+
+        notification.setListener((n, event) -> {
+            if (form != null)
+                form.hide();
+            new EditConfigurationsDialog(project).show();
+        });
+
+        notification.notify(project);
     }
 }

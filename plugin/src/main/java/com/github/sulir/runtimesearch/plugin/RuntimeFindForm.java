@@ -47,6 +47,10 @@ public class RuntimeFindForm {
         }
     }
 
+    public void hide() {
+        popup.cancel();
+    }
+
     private void findButtonPressed() {
         RuntimeFindManager manager = RuntimeFindManager.getInstance(project);
         manager.setSearchText(searchField.getText());
