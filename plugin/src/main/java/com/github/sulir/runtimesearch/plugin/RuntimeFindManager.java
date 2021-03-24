@@ -1,5 +1,6 @@
 package com.github.sulir.runtimesearch.plugin;
 
+import com.github.sulir.runtimesearch.plugin.breakpoint.RuntimeBreakpointType;
 import com.github.sulir.runtimesearch.plugin.config.RuntimeSearchSettings;
 import com.intellij.debugger.engine.JavaValue;
 import com.intellij.execution.Executor;
@@ -17,10 +18,14 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebuggerManager;
+import com.intellij.xdebugger.XDebuggerUtil;
+import com.intellij.xdebugger.breakpoints.XBreakpoint;
+import com.intellij.xdebugger.breakpoints.XBreakpointManager;
 import com.intellij.xdebugger.evaluation.XDebuggerEvaluator;
 import com.intellij.xdebugger.frame.XValue;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.java.debugger.breakpoints.properties.JavaExceptionBreakpointProperties;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -56,6 +61,7 @@ public class RuntimeFindManager {
         if (searchText.isEmpty()) {
             showForm();
         } else {
+            enableBreakpoint();
             XDebugSession session = XDebuggerManager.getInstance(project).getCurrentSession();
 
             if (session == null) {
@@ -88,7 +94,7 @@ public class RuntimeFindManager {
         RunConfigurationBase<?> configuration = (RunConfigurationBase<?>) selected.getConfiguration();
         RuntimeSearchSettings settings = RuntimeSearchSettings.getOrCreate(configuration);
         if (!settings.isEnabled()) {
-            offerToEnable();
+            offerToEnablePlugin();
             return;
         }
 
@@ -108,7 +114,7 @@ public class RuntimeFindManager {
             public void evaluated(@NotNull XValue result) {
                 String resultType = ((JavaValue) result).getTypeName();
                 if (resultType != null && resultType.equals("java.lang.ClassNotFoundException")) {
-                    offerToEnable();
+                    offerToEnablePlugin();
                 } else {
                     ApplicationManager.getApplication().invokeLater(session::resume);
                 }
@@ -126,11 +132,18 @@ public class RuntimeFindManager {
         ) {
             output.writeObject(searchText.isEmpty() ? null : searchText);
         } catch (IOException e) {
-            offerToEnable();
+            offerToEnablePlugin();
         }
     }
 
-    private void offerToEnable() {
+    private void enableBreakpoint() {
+        RuntimeBreakpointType type = XDebuggerUtil.getInstance().findBreakpointType(RuntimeBreakpointType.class);
+        XBreakpointManager manager = XDebuggerManager.getInstance(project).getBreakpointManager();
+        XBreakpoint<?> breakpoint = manager.getDefaultBreakpoints(type).iterator().next();
+        breakpoint.setEnabled(true);
+    }
+
+    private void offerToEnablePlugin() {
         Notification notification = new Notification(NOTIFICATION_GROUP, Messages.get("error.disabled.title"),
                 Messages.get("error.disabled.content"), NotificationType.WARNING);
 

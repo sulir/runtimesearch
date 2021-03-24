@@ -29,10 +29,14 @@
         <projectService serviceImplementation="com.github.sulir.runtimesearch.plugin.RuntimeFindManager"/>
         <runConfigurationExtension
                 implementation="com.github.sulir.runtimesearch.plugin.config.RuntimeSearchRunConfigExtension"/>
+        <xdebugger.breakpointType
+                implementation="com.github.sulir.runtimesearch.plugin.breakpoint.RuntimeBreakpointType"/>
+        <debugger.javaBreakpointHandlerFactory
+                implementation="com.github.sulir.runtimesearch.plugin.breakpoint.RuntimeBreakpointHandlerFactory"/>
     </extensions>
 
     <projectListeners>
-        <listener class="com.github.sulir.runtimesearch.plugin.PauseHandler"
+        <listener class="com.github.sulir.runtimesearch.plugin.breakpoint.PauseHandler"
                   topic="com.intellij.debugger.impl.DebuggerManagerListener"/>
     </projectListeners>
 </idea-plugin>

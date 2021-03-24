@@ -1,5 +1,6 @@
-package com.github.sulir.runtimesearch.plugin;
+package com.github.sulir.runtimesearch.plugin.breakpoint;
 
+import com.github.sulir.runtimesearch.plugin.RuntimeFindManager;
 import com.intellij.debugger.impl.DebuggerManagerListener;
 import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.openapi.application.ApplicationManager;
@@ -15,10 +16,6 @@ public class PauseHandler implements DebuggerManagerListener {
 
     private final Project project;
 
-    public PauseHandler() {
-        this.project = null;
-    }
-
     public PauseHandler(Project project) {
         this.project = project;
     }
@@ -26,7 +23,7 @@ public class PauseHandler implements DebuggerManagerListener {
     @Override
     public void sessionAttached(DebuggerSession session) {
         XDebugSession xSession = session.getXDebugSession();
-        if (project == null || xSession == null)
+        if (xSession == null)
             return;
 
         xSession.addSessionListener(new XDebugSessionListener() {
