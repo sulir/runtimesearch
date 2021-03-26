@@ -21,7 +21,7 @@
             <action id="RuntimeFindNext" class="com.github.sulir.runtimesearch.plugin.RuntimeFindNextAction">
                 <keyboard-shortcut keymap="$default" first-keystroke="shift alt F3"/>
             </action>
-            <add-to-group group-id="GoToMenu" anchor="last"/>
+            <add-to-group group-id="RunMenu" anchor="last"/>
         </group>
     </actions>
 

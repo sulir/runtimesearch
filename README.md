@@ -12,4 +12,4 @@ To build both the Java agent and the IDE plugin, run the command:
 
 1. To open IntelliJ IDEA with the plugin, type the command: `./gradlew runIde`
 2. Open the Run/Debug Configuration you would like to use. In the "RuntimeSearch Settings" tab/section, check "Enable RuntimeSearch for this configuration". You can also restrict the search scope to selected packages or classes.
-3. Debug the program, use Navigate / Find in Runtime, etc.
+3. Debug the program, use Run / Find in Runtime, etc.
