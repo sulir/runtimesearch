@@ -1,5 +1,7 @@
 # RuntimeSearch
 
+[![Build status](https://github.com/sulir/runtimesearch/actions/workflows/build.yml/badge.svg)](https://github.com/sulir/runtimesearch/actions/workflows/build.yml)
+
 RuntimeSearch is a debugger extension which searches the given text in the values of all string expressions in a running program. For a demonstration, see the [website](https://sulir.github.io/runtimesearch/).
 
 ## Building
