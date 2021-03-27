@@ -1,5 +1,6 @@
 plugins {
     id 'org.jetbrains.intellij' version '0.7.2'
+    id 'org.jetbrains.changelog' version '1.1.1'
 }
 
 intellij {
@@ -10,17 +11,26 @@ intellij {
 }
 
 patchPluginXml {
-    changeNotes = 'This is an early alpha version. An official release will come soon.'
+    changeNotes {
+        changelog.getAll().collect {
+            '<b>' + it.getKey() + '</b>' + it.getValue().toHTML()
+        }.join()
+    }
+}
+
+changelog {
+    path = "${project.rootDir}/CHANGELOG.md"
+    headerParserRegex = /(\d+)\.(\d+)/
 }
 
 dependencies {
-     runtimeOnly(project(':runtimesearch-agent')) {
-         transitive = false
-     }
+    runtimeOnly(project(':runtimesearch-agent')) {
+        transitive = false
+    }
 }
 
 buildPlugin {
-    destinationDirectory = project.file('../dist')
+    destinationDirectory = project.rootProject.file('dist')
     archiveFileName = "${project.name}.zip"
 }
 

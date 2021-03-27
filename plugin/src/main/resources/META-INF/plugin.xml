@@ -1,10 +1,13 @@
-<idea-plugin>
+<idea-plugin url="https://sulir.github.io/runtimesearch/">
     <id>com.github.sulir.runtimesearch</id>
     <name>RuntimeSearch</name>
-    <vendor>Matúš Sulír</vendor>
+    <vendor url="https://sulir.github.io" email="matus.sulir@gmail.com">Matúš Sulír</vendor>
 
     <description><![CDATA[
-        Searches for occurrences of strings in a running program.
+        <p>Searches for occurrences of strings in a debugged program.<p>
+        <p>Before using, enable the plugin for the selected <b>Debug Configuration</b> under <b>RuntimeSearch Settings</b> (this can incur minor runtime performance overhead).</p>
+        <p>To start searching, select <b>Run | Find in Runtime</b>, enter the searched string and press Find. If the program is not yet being debugged, a new process will be started. Then interact with the running application. As soon as any string expression in the program will contain the searched string (substrings are matched), the process will be paused. You can use traditional debugging actions (e.g., Step Over) or search for the next occurrence via <b>Run | Find Next in Runtime</b>.</p>
+        <p>For a tutorial and a sample use case, watch the <a href="https://sulir.github.io/runtimesearch/#video">video</a>.</p>
     ]]>
     </description>
 
