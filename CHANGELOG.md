@@ -1,4 +1,4 @@
 # RuntimeSearch
 
-## [Unreleased]
+## Unreleased
 - This is the initial version.

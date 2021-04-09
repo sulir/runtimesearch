@@ -1,6 +1,31 @@
+plugins {
+    id 'fr.brouillard.oss.gradle.jgitver' version '0.9.1'
+    id 'org.jetbrains.changelog' version '1.1.1'
+}
+
+jgitver {
+    useDirty = true
+    policy {
+        pattern = '(.*)'
+        transformations = ['IGNORE']
+    }
+}
+
+changelog {
+    headerParserRegex = /(\d+)\.(\d+)/
+    unreleasedTerm = 'Unreleased'
+}
+
+allprojects {
+    project.afterEvaluate {
+        def release = (version =~ /(\d+.\d+).0/)
+        version = release.matches() ? release.group(1) : 'snapshot'
+        changelog.version = version
+    }
+}
+
 subprojects {
     group = 'com.github.sulir.runtimesearch'
-    version '1.0-SNAPSHOT'
 
     apply plugin: 'java'
     sourceCompatibility = 1.8

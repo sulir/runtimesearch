@@ -1,10 +1,9 @@
 plugins {
     id 'org.jetbrains.intellij' version '0.7.2'
-    id 'org.jetbrains.changelog' version '1.1.1'
 }
 
 intellij {
-    version '2020.3.3'
+    version = '2020.3.3'
     plugins = ['java']
     updateSinceUntilBuild = false
     buildSearchableOptions.enabled = false
@@ -18,11 +17,6 @@ patchPluginXml {
     }
 }
 
-changelog {
-    path = "${project.rootDir}/CHANGELOG.md"
-    headerParserRegex = /(\d+)\.(\d+)/
-}
-
 dependencies {
     runtimeOnly(project(':runtimesearch-agent')) {
         transitive = false
@@ -30,8 +24,13 @@ dependencies {
 }
 
 buildPlugin {
+    dependsOn ':runtimesearch-agent:jar'
     destinationDirectory = project.rootProject.file('dist')
-    archiveFileName = "${project.name}.zip"
+}
+
+publishPlugin {
+    token = System.getenv('PUBLISH_TOKEN')
+    channels = [version.contains('snapshot') ? 'snapshot' : 'default']
 }
 
 runIde {
