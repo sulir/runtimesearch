@@ -1,0 +1,16 @@
+name: Gradle Build
+description: Compile, package, and test IntelliJ plugin using Gradle.
+runs:
+  using: composite
+  steps:
+    - name: Build with Gradle
+      shell: bash
+      run: ./gradlew assemble
+
+    - name: Run Tests with Gradle
+      shell: bash
+      run: ./gradlew check
+
+    - name: Verify IntelliJ Plugin Structure
+      shell: bash
+      run: ./gradlew verifyPlugin
