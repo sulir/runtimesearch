@@ -1,6 +1,8 @@
 plugins {
     id 'fr.brouillard.oss.gradle.jgitver' version '0.9.1'
     id 'org.jetbrains.changelog' version '1.1.1'
+    id 'com.github.ben-manes.versions' version '0.38.0'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.15'
 }
 
 jgitver {
@@ -16,12 +18,22 @@ changelog {
     unreleasedTerm = 'Unreleased'
 }
 
+dependencyUpdates {
+    revision = 'release'
+    rejectVersionIf {
+        it.candidate.version.contains('-')
+    }
+}
+
 allprojects {
     project.afterEvaluate {
         def release = (version =~ /(\d+.\d+).0/)
         version = release.matches() ? release.group(1) : 'snapshot'
         changelog.version = version
     }
+
+    apply plugin: 'se.patrikerdes.use-latest-versions'
+    apply plugin: 'com.github.ben-manes.versions'
 }
 
 subprojects {
