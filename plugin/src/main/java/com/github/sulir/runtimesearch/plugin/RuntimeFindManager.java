@@ -120,7 +120,10 @@ public class RuntimeFindManager {
             }
 
             @Override
-            public void errorOccurred(@NotNull String errorMessage) { }
+            public void errorOccurred(@NotNull String errorMessage) {
+                new Notification(NOTIFICATION_GROUP, Messages.get("error.paused.title"),
+                        Messages.get("error.paused.content"), NotificationType.ERROR).notify(project);
+            }
         }, null);
     }
 
