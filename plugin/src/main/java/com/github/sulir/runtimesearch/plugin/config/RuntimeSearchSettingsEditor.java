@@ -14,11 +14,16 @@ import javax.swing.*;
 public class RuntimeSearchSettingsEditor extends SettingsEditor<RunConfigurationBase<?>> {
     private static final String DEFAULT_INCLUDE = Messages.get("settings.include.empty");
 
+    private final Project project;
     private JPanel mainPanel;
     private JCheckBox enabledCheckBox;
     private PatternFilterEditor includeFilterEditor;
     private TitledSeparator mainSeparator;
     private JLabel includeLabel;
+
+    public RuntimeSearchSettingsEditor(Project project) {
+        this.project = project;
+    }
 
     @Override
     protected void resetEditorFrom(@NotNull RunConfigurationBase runConfiguration) {
@@ -42,7 +47,6 @@ public class RuntimeSearchSettingsEditor extends SettingsEditor<RunConfiguration
     }
 
     private void createUIComponents() {
-        Project project = ProjectUtil.guessCurrentProject(mainPanel);
         includeFilterEditor = new PatternFilterEditor(project);
         includeFilterEditor.getEmptyText().setText(DEFAULT_INCLUDE);
     }

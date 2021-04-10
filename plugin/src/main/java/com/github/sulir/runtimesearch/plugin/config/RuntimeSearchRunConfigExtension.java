@@ -39,7 +39,7 @@ public class RuntimeSearchRunConfigExtension extends RunConfigurationExtension {
     @Override
     @SuppressWarnings("unchecked")
     protected SettingsEditor<RunConfigurationBase<?>> createEditor(@NotNull RunConfigurationBase configuration) {
-        return new RuntimeSearchSettingsEditor();
+        return new RuntimeSearchSettingsEditor(configuration.getProject());
     }
 
     @Override
