@@ -1,5 +1,6 @@
 plugins {
     id 'org.jetbrains.intellij' version '0.7.2'
+    id 'org.jetbrains.changelog' version '1.1.2'
 }
 
 intellij {
@@ -9,8 +10,25 @@ intellij {
     buildSearchableOptions.enabled = false
 }
 
+changelog {
+    version = rootProject.version
+    path = "${project.rootDir}/CHANGELOG.md"
+    headerParserRegex = /(\d+)\.(\d+)/
+    unreleasedTerm = 'Unreleased'
+}
+
 patchPluginXml {
-    changeNotes {
+    pluginDescription = {
+        def lines = rootProject.file('README.md').readLines()
+        def start = lines.indexOf('<!--plugin-desc-->')
+        def end = lines.indexOf('<!--/plugin-desc-->')
+        def description = lines.subList(start + 1, end).join('\n')
+        String readme = org.jetbrains.changelog.ExtensionsKt.markdownToHTML(description)
+
+        '<p>Searches the given text in all string expressions of a debugged program.<p>' + readme
+    }
+
+    changeNotes = {
         changelog.getAll().collect {
             '<b>' + it.getKey() + '</b>' + it.getValue().toHTML()
         }.join()
