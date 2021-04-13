@@ -3,8 +3,10 @@ plugins {
     id 'org.jetbrains.changelog' version '1.1.2'
 }
 
+def intellijVersions = ['2020.1.4', '2020.2.4', '2020.3.3', '2021.1']
+
 intellij {
-    version = '2021.1'
+    version = intellijVersions.last()
     plugins = ['java']
     updateSinceUntilBuild = false
     buildSearchableOptions.enabled = false
@@ -44,6 +46,10 @@ dependencies {
 buildPlugin {
     dependsOn ':runtimesearch-agent:jar'
     destinationDirectory = project.rootProject.file('dist')
+}
+
+runPluginVerifier {
+    ideVersions = intellijVersions
 }
 
 publishPlugin {

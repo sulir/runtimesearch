@@ -14,3 +14,7 @@ runs:
     - name: Verify IntelliJ Plugin Structure
       shell: bash
       run: ./gradlew verifyPlugin
+
+    - name: Check IntelliJ Version Compatibility
+      shell: bash
+      run: ./gradlew runPluginVerifier
