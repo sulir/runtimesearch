@@ -23,6 +23,7 @@ import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XBreakpointManager;
 import com.intellij.xdebugger.evaluation.XDebuggerEvaluator;
 import com.intellij.xdebugger.frame.XValue;
+import com.sun.jdi.Type;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -111,8 +112,8 @@ public class RuntimeFindManager {
         evaluator.evaluate(expression, new XDebuggerEvaluator.XEvaluationCallback() {
             @Override
             public void evaluated(@NotNull XValue result) {
-                String resultType = ((JavaValue) result).getTag();
-                if (resultType != null && resultType.equals("java.lang.ClassNotFoundException")) {
+                Type resultType = ((JavaValue) result).getDescriptor().getType();
+                if (resultType != null && resultType.name().equals("java.lang.ClassNotFoundException")) {
                     offerToEnablePlugin();
                 } else {
                     ApplicationManager.getApplication().invokeLater(session::resume);
