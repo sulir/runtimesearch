@@ -33,7 +33,7 @@ public class Check {
                         e.printStackTrace();
                     }
                 }
-            });
+            }, "RuntimeSearch");
 
             thread.setDaemon(true);
             thread.start();
