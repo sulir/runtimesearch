@@ -7,7 +7,7 @@ RuntimeSearch is a debugger extension which searches the given text in the value
 ## Usage
 
 <!--plugin-desc-->
-Before using, open the Debug Configuration you would like to use via **Run | Edit Configurations**. Under **RuntimeSearch Settings**, check *Enable RuntimeSearch for this configuration*. This may incur minor debugging performance overhead. You can also restrict the search scope to selected packages.
+Before using, open the Debug Configuration you would like to use via **Run | Edit Configurations**. Under **RuntimeSearch Settings**, check *Enable RuntimeSearch for this configuration*. This may incur minor debugging performance overhead. You can also restrict the search scope to selected packages. Note that non-JVM (e.g., Android) targets are not supported.
 
 To start searching, select **Run | Find in Runtime**, enter the searched string and press Find. If the program is not yet being debugged, a new process will be started. Then interact with the running application. As soon as any string expression in the program will contain the searched string (substrings are matched), the process will be paused. You can use traditional debugging actions (e.g., Step Over) or search for the next occurrence via **Run | Find Next in Runtime**.
 
