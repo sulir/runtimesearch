@@ -8,6 +8,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebugSessionListener;
 import com.intellij.xdebugger.frame.XStackFrame;
+import com.sun.jdi.ThreadReference;
+import com.sun.jdi.VirtualMachine;
+
+import java.util.Optional;
 
 public class PauseHandler implements DebuggerManagerListener {
     private static final String CLASS = "Lcom/github/sulir/runtimesearch/runtime/Check;";
@@ -29,6 +33,11 @@ public class PauseHandler implements DebuggerManagerListener {
         xSession.addSessionListener(new XDebugSessionListener() {
             @Override
             public void sessionPaused() {
+                VirtualMachine vm = session.getProcess().getVirtualMachineProxy().getVirtualMachine();
+                Optional<ThreadReference> thread = vm.allThreads().stream().filter(t ->
+                        t.name().equals("RuntimeSearch")).findFirst();
+                thread.ifPresent(ThreadReference::resume);
+
                 XStackFrame stackFrame = xSession.getCurrentStackFrame();
                 if (stackFrame == null)
                     return;
