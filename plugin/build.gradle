@@ -58,6 +58,7 @@ publishPlugin {
 }
 
 runIde {
+    dependsOn ':runtimesearch-agent:jar'
     jvmArgs '--add-exports', 'java.base/jdk.internal.vm=ALL-UNNAMED'
 }
 
