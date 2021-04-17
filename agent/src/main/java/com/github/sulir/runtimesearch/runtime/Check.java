@@ -8,6 +8,7 @@ import java.net.Socket;
 
 public class Check {
     public static final int PORT = 4321;
+    public static final int CONFIRMATION = 0;
     public static String searchValue;
 
     public static void initialize() {
@@ -28,6 +29,7 @@ public class Check {
                         Socket client = server.accept();
                         ObjectInputStream input = new ObjectInputStream(client.getInputStream());
                         searchValue = (String) input.readObject();
+                        client.getOutputStream().write(CONFIRMATION);
                         client.close();
                     } catch (IOException | ClassNotFoundException e) {
                         e.printStackTrace();

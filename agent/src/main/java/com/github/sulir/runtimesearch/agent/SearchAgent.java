@@ -18,8 +18,8 @@ public class SearchAgent {
     );
 
     static {
-        Check.initialize();
         Check.runServer();
+        Check.initialize();
     }
 
     public static void premain(String agentArgs, Instrumentation inst) {

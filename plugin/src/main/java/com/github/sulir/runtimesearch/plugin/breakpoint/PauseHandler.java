@@ -58,7 +58,8 @@ public class PauseHandler implements DebuggerManagerListener {
     }
 
     private void initializeSearch(XDebugSession session) {
-        RuntimeFindManager.getInstance(project).sendSearchStringExpression(session);
+        RuntimeFindManager.getInstance(project).sendSearchText();
+        ApplicationManager.getApplication().invokeLater(session::resume);
     }
 
     private void occurrenceFound(XDebugSession session) {
