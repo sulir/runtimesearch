@@ -52,7 +52,7 @@ public class PauseHandler implements DebuggerManagerListener {
 
             @Override
             public void sessionStopped() {
-                RuntimeFindManager.getInstance(project).setSearchText("");
+                RuntimeFindManager.getInstance(project).getOptions().setText("");
             }
         });
     }

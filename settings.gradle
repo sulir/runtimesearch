@@ -1,4 +1,5 @@
 rootProject.name = 'RuntimeSearch'
-include 'agent', 'plugin'
+include 'shared', 'agent', 'plugin'
+project(':shared').name = 'runtimesearch-shared'
 project(':agent').name = 'runtimesearch-agent'
 project(':plugin').name = 'runtimesearch-plugin'

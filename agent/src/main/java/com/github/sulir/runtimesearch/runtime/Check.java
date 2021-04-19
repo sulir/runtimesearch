@@ -7,9 +7,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Check {
-    public static final int PORT = 4321;
-    public static final int CONFIRMATION = 0;
-    public static String searchValue;
+    private static boolean searchActive;
+    private static SearchOptions options;
 
     public static void initialize() {
         try {
@@ -21,15 +20,18 @@ public class Check {
 
     public static void runServer() {
         try {
-            ServerSocket server = new ServerSocket(PORT, 0, InetAddress.getLoopbackAddress());
+            ServerSocket server = new ServerSocket(SearchOptions.PORT, 0, InetAddress.getLoopbackAddress());
 
             Thread thread = new Thread(() -> {
                 while (true) {
                     try {
                         Socket client = server.accept();
                         ObjectInputStream input = new ObjectInputStream(client.getInputStream());
-                        searchValue = (String) input.readObject();
-                        client.getOutputStream().write(CONFIRMATION);
+
+                        options = (SearchOptions) input.readObject();
+                        searchActive = options.isActive();
+
+                        client.getOutputStream().write(SearchOptions.CONFIRMATION);
                         client.close();
                     } catch (IOException | ClassNotFoundException e) {
                         e.printStackTrace();
@@ -45,14 +47,14 @@ public class Check {
     }
 
     public static void perform(Object object) {
-        if (searchValue == null)
+        if (!searchActive)
             return;
 
         if (object instanceof String) {
             String string = (String) object;
-            if (string.contains(searchValue)) {
+            if (string.contains(options.getText())) {
                 try {
-                    searchValue = null;
+                    searchActive = false;
                     throw new BreakpointError();
                 } catch (BreakpointError e) {
                     // exception thrown to trigger a breakpoint in the IDE

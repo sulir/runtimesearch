@@ -2,6 +2,7 @@ package com.github.sulir.runtimesearch.plugin;
 
 import com.github.sulir.runtimesearch.plugin.breakpoint.RuntimeBreakpointType;
 import com.github.sulir.runtimesearch.plugin.config.RuntimeSearchSettings;
+import com.github.sulir.runtimesearch.runtime.SearchOptions;
 import com.intellij.execution.Executor;
 import com.intellij.execution.ProgramRunnerUtil;
 import com.intellij.execution.RunManager;
@@ -27,12 +28,11 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 public class RuntimeFindManager {
-    public static final int PORT = 4321;
     private static final String NOTIFICATION_GROUP = "RuntimeSearch";
 
     private final Project project;
     private RuntimeFindForm form;
-    private String searchText = "";
+    private final SearchOptions options = new SearchOptions();
 
     public static RuntimeFindManager getInstance(Project project) {
         return ServiceManager.getService(project, RuntimeFindManager.class);
@@ -50,7 +50,7 @@ public class RuntimeFindManager {
     }
 
     public void findNext() {
-        if (searchText.isEmpty()) {
+        if (options.getText().isEmpty()) {
             showForm();
         } else {
             enableBreakpoint();
@@ -66,12 +66,8 @@ public class RuntimeFindManager {
         }
     }
 
-    public String getSearchText() {
-        return searchText;
-    }
-
-    public void setSearchText(String searchText) {
-        this.searchText = searchText;
+    public SearchOptions getOptions() {
+        return options;
     }
 
     public void startDebugging() {
@@ -95,11 +91,11 @@ public class RuntimeFindManager {
 
     public void sendSearchText() {
         try (
-            Socket client = new Socket(InetAddress.getLoopbackAddress(), PORT);
-            ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream());
-            InputStream input = client.getInputStream()
+                Socket client = new Socket(InetAddress.getLoopbackAddress(), SearchOptions.PORT);
+                ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream());
+                InputStream input = client.getInputStream()
         ) {
-            output.writeObject(searchText.isEmpty() ? null : searchText);
+            output.writeObject(options);
             @SuppressWarnings("unused") int confirmation = input.read();
         } catch (IOException e) {
             offerToEnablePlugin();
