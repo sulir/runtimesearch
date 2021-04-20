@@ -1,6 +1,6 @@
 package com.github.sulir.runtimesearch.plugin;
 
-import com.github.sulir.runtimesearch.runtime.SearchOptions;
+import com.github.sulir.runtimesearch.shared.SearchOptions;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.ComponentPopupBuilder;

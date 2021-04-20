@@ -1,5 +1,6 @@
 package com.github.sulir.runtimesearch.plugin.breakpoint;
 
+import com.github.sulir.runtimesearch.shared.BreakpointError;
 import com.intellij.debugger.ui.breakpoints.Breakpoint;
 import com.intellij.debugger.ui.breakpoints.ExceptionBreakpoint;
 import com.intellij.debugger.ui.breakpoints.JavaBreakpointType;
@@ -17,7 +18,7 @@ import java.util.EnumSet;
 public class RuntimeBreakpointType
         extends XBreakpointType<XBreakpoint<JavaExceptionBreakpointProperties>, JavaExceptionBreakpointProperties>
         implements JavaBreakpointType<JavaExceptionBreakpointProperties> {
-    private static final String BREAKPOINT_CLASS = "com.github.sulir.runtimesearch.runtime.BreakpointError";
+    private static final String BREAKPOINT_CLASS = BreakpointError.class.getName();
 
     protected RuntimeBreakpointType() {
         super("java-runtime", "Runtime Breakpoints", true);

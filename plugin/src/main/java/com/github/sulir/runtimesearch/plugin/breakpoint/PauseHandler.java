@@ -1,6 +1,8 @@
 package com.github.sulir.runtimesearch.plugin.breakpoint;
 
 import com.github.sulir.runtimesearch.plugin.RuntimeFindManager;
+import com.github.sulir.runtimesearch.shared.Check;
+import com.github.sulir.runtimesearch.shared.ServerConfig;
 import com.intellij.debugger.impl.DebuggerManagerListener;
 import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.openapi.application.ApplicationManager;
@@ -10,11 +12,12 @@ import com.intellij.xdebugger.XDebugSessionListener;
 import com.intellij.xdebugger.frame.XStackFrame;
 import com.sun.jdi.ThreadReference;
 import com.sun.jdi.VirtualMachine;
+import org.objectweb.asm.Type;
 
 import java.util.Optional;
 
 public class PauseHandler implements DebuggerManagerListener {
-    private static final String CLASS = "Lcom/github/sulir/runtimesearch/runtime/Check;";
+    private static final String CLASS = Type.getType(Check.class).getDescriptor();
     private static final String INITIALIZE = CLASS + "#initialize(";
     private static final String FOUND = CLASS + "#perform(";
 
@@ -35,7 +38,7 @@ public class PauseHandler implements DebuggerManagerListener {
             public void sessionPaused() {
                 VirtualMachine vm = session.getProcess().getVirtualMachineProxy().getVirtualMachine();
                 Optional<ThreadReference> thread = vm.allThreads().stream().filter(t ->
-                        t.name().equals("RuntimeSearch")).findFirst();
+                        t.name().equals(ServerConfig.THREAD_NAME)).findFirst();
                 thread.ifPresent(ThreadReference::resume);
 
                 XStackFrame stackFrame = xSession.getCurrentStackFrame();

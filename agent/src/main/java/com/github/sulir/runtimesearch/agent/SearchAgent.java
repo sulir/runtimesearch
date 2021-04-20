@@ -1,6 +1,7 @@
 package com.github.sulir.runtimesearch.agent;
 
-import com.github.sulir.runtimesearch.runtime.Check;
+import com.github.sulir.runtimesearch.agent.transformer.ClassTransformer;
+import com.github.sulir.runtimesearch.shared.Check;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
@@ -18,7 +19,7 @@ public class SearchAgent {
     );
 
     static {
-        Check.runServer();
+        Server.getInstance().start();
         Check.initialize();
     }
 

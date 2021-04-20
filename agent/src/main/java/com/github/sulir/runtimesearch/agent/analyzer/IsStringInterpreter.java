@@ -1,7 +1,7 @@
 package com.github.sulir.runtimesearch.agent.analyzer;
 
-import com.github.sulir.runtimesearch.agent.ClassTransformer;
-import com.github.sulir.runtimesearch.agent.ObjectType;
+import com.github.sulir.runtimesearch.agent.transformer.ClassTransformer;
+import com.github.sulir.runtimesearch.agent.transformer.ObjectType;
 import org.objectweb.asm.ConstantDynamic;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
