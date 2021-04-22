@@ -2,7 +2,8 @@ package com.github.sulir.runtimesearch.plugin;
 
 import com.github.sulir.runtimesearch.plugin.breakpoint.RuntimeBreakpointType;
 import com.github.sulir.runtimesearch.plugin.config.RuntimeSearchSettings;
-import com.intellij.debugger.engine.JavaValue;
+import com.github.sulir.runtimesearch.shared.SearchOptions;
+import com.github.sulir.runtimesearch.shared.ServerConfig;
 import com.intellij.execution.Executor;
 import com.intellij.execution.ProgramRunnerUtil;
 import com.intellij.execution.RunManager;
@@ -13,7 +14,6 @@ import com.intellij.execution.impl.EditConfigurationsDialog;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.xdebugger.XDebugSession;
@@ -21,26 +21,19 @@ import com.intellij.xdebugger.XDebuggerManager;
 import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XBreakpointManager;
-import com.intellij.xdebugger.evaluation.XDebuggerEvaluator;
-import com.intellij.xdebugger.frame.XValue;
-import com.sun.jdi.Type;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
 public class RuntimeFindManager {
-    public static final int PORT = 4321;
-    private static final String SEND_VALUE = "Class.forName(\"com.github.sulir.runtimesearch" +
-            ".runtime.Check\").getDeclaredField(\"searchValue\").set(null, %s)";
     private static final String NOTIFICATION_GROUP = "RuntimeSearch";
 
     private final Project project;
     private RuntimeFindForm form;
-    private String searchText = "";
+    private final SearchOptions options = new SearchOptions();
 
     public static RuntimeFindManager getInstance(Project project) {
         return ServiceManager.getService(project, RuntimeFindManager.class);
@@ -58,7 +51,7 @@ public class RuntimeFindManager {
     }
 
     public void findNext() {
-        if (searchText.isEmpty()) {
+        if (options.getText().isEmpty()) {
             showForm();
         } else {
             enableBreakpoint();
@@ -67,20 +60,15 @@ public class RuntimeFindManager {
             if (session == null) {
                 startDebugging();
             } else {
+                sendSearchText();
                 if (session.isPaused())
-                    sendSearchStringExpression(session);
-                else
-                    sendSearchStringSocket();
+                    session.resume();
             }
         }
     }
 
-    public String getSearchText() {
-        return searchText;
-    }
-
-    public void setSearchText(String searchText) {
-        this.searchText = searchText;
+    public SearchOptions getOptions() {
+        return options;
     }
 
     public void startDebugging() {
@@ -102,38 +90,14 @@ public class RuntimeFindManager {
         ProgramRunnerUtil.executeConfiguration(selected, debugExecutor);
     }
 
-    public void sendSearchStringExpression(XDebugSession session) {
-        XDebuggerEvaluator evaluator = session.getDebugProcess().getEvaluator();
-        assert evaluator != null;
-        String searchString = searchText.isEmpty() ? "null"
-                : '"' + StringEscapeUtils.escapeJava(searchText) + '"';
-        String expression = String.format(SEND_VALUE, searchString);
-
-        evaluator.evaluate(expression, new XDebuggerEvaluator.XEvaluationCallback() {
-            @Override
-            public void evaluated(@NotNull XValue result) {
-                Type resultType = ((JavaValue) result).getDescriptor().getType();
-                if (resultType != null && resultType.name().equals("java.lang.ClassNotFoundException")) {
-                    offerToEnablePlugin();
-                } else {
-                    ApplicationManager.getApplication().invokeLater(session::resume);
-                }
-            }
-
-            @Override
-            public void errorOccurred(@NotNull String errorMessage) {
-                new Notification(NOTIFICATION_GROUP, Messages.get("error.paused.title"),
-                        Messages.get("error.paused.content"), NotificationType.ERROR).notify(project);
-            }
-        }, null);
-    }
-
-    private void sendSearchStringSocket() {
+    public void sendSearchText() {
         try (
-            Socket client = new Socket(InetAddress.getLoopbackAddress(), PORT);
-            ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream())
+                Socket client = new Socket(InetAddress.getLoopbackAddress(), ServerConfig.PORT);
+                ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream());
+                InputStream input = client.getInputStream()
         ) {
-            output.writeObject(searchText.isEmpty() ? null : searchText);
+            output.writeObject(options);
+            @SuppressWarnings("unused") int confirmation = input.read();
         } catch (IOException e) {
             offerToEnablePlugin();
         }

@@ -1,5 +1,6 @@
-package com.github.sulir.runtimesearch.agent;
+package com.github.sulir.runtimesearch.agent.transformer;
 
+import com.github.sulir.runtimesearch.agent.Check;
 import com.github.sulir.runtimesearch.agent.analyzer.StackAnalyzer;
 import com.github.sulir.runtimesearch.agent.analyzer.StringValue;
 import org.objectweb.asm.Opcodes;
@@ -8,6 +9,8 @@ import org.objectweb.asm.tree.*;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 
 public class MethodTransformer implements Opcodes {
+    public static final String CHECK_CLASS = Type.getType(Check.class).getInternalName();
+
     private final String className;
     private final MethodNode method;
     private final InsnList instructions;
@@ -66,8 +69,7 @@ public class MethodTransformer implements Opcodes {
     }
 
     private AbstractInsnNode generateInvokestatic() {
-        return new MethodInsnNode(Opcodes.INVOKESTATIC, "com/github/sulir/runtimesearch/runtime/Check",
-                "perform", "(Ljava/lang/Object;)V");
+        return new MethodInsnNode(Opcodes.INVOKESTATIC, CHECK_CLASS, "perform", "(Ljava/lang/Object;)V");
     }
 
     private InsnList generateInstrumentation() {

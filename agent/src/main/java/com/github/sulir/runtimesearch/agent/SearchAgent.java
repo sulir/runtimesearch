@@ -1,6 +1,6 @@
 package com.github.sulir.runtimesearch.agent;
 
-import com.github.sulir.runtimesearch.runtime.Check;
+import com.github.sulir.runtimesearch.agent.transformer.ClassTransformer;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
@@ -17,12 +17,10 @@ public class SearchAgent {
             "org.objectweb.asm.", "com.github.sulir.runtimesearch."
     );
 
-    static {
-        Check.initialize();
-        Check.runServer();
-    }
-
     public static void premain(String agentArgs, Instrumentation inst) {
+        Check.initialize();
+        Server.getInstance().start();
+
         boolean filterSupplied = agentArgs != null && !agentArgs.isEmpty();
         Pattern include = Pattern.compile(filterSupplied ? agentArgs : ".*");
         List<String> exclude = filterSupplied ? Collections.emptyList() : defaultExclude;
@@ -36,10 +34,8 @@ public class SearchAgent {
                         return null;
                     className = className.replace('/', '.');
 
-                    if (include.matcher(className).matches() && exclude.stream().noneMatch(className::startsWith)) {
-                        ClassTransformer transformer = new ClassTransformer(className, classfileBuffer);
-                        return transformer.transform();
-                    }
+                    if (include.matcher(className).matches() && exclude.stream().noneMatch(className::startsWith))
+                        return new ClassTransformer(className, classfileBuffer).transform();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

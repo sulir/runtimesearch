@@ -1,18 +1,23 @@
 package com.github.sulir.runtimesearch.plugin.breakpoint;
 
 import com.github.sulir.runtimesearch.plugin.RuntimeFindManager;
+import com.github.sulir.runtimesearch.shared.BreakpointError;
+import com.github.sulir.runtimesearch.shared.ServerConfig;
+import com.intellij.debugger.engine.SuspendContextImpl;
 import com.intellij.debugger.impl.DebuggerManagerListener;
 import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebugSessionListener;
-import com.intellij.xdebugger.frame.XStackFrame;
+import com.sun.jdi.ThreadReference;
+import com.sun.jdi.VirtualMachine;
+import com.sun.jdi.event.ExceptionEvent;
+
+import java.util.Optional;
 
 public class PauseHandler implements DebuggerManagerListener {
-    private static final String CLASS = "Lcom/github/sulir/runtimesearch/runtime/Check;";
-    private static final String INITIALIZE = CLASS + "#initialize(";
-    private static final String FOUND = CLASS + "#perform(";
+    private static final String BREAKPOINT_CLASS = BreakpointError.class.getName();
 
     private final Project project;
 
@@ -29,30 +34,34 @@ public class PauseHandler implements DebuggerManagerListener {
         xSession.addSessionListener(new XDebugSessionListener() {
             @Override
             public void sessionPaused() {
-                XStackFrame stackFrame = xSession.getCurrentStackFrame();
-                if (stackFrame == null)
-                    return;
-
-                String method = String.valueOf(stackFrame.getEqualityObject());
-
-                if (method.startsWith(INITIALIZE))
-                    initializeSearch(xSession);
-                else if (method.startsWith(FOUND))
-                    occurrenceFound(xSession);
+                resumeServerThread(session);
+                stepOutIfFound(session);
             }
 
             @Override
             public void sessionStopped() {
-                RuntimeFindManager.getInstance(project).setSearchText("");
+                RuntimeFindManager.getInstance(project).getOptions().setText("");
             }
         });
     }
 
-    private void initializeSearch(XDebugSession session) {
-        RuntimeFindManager.getInstance(project).sendSearchStringExpression(session);
+    private void resumeServerThread(DebuggerSession session) {
+        VirtualMachine vm = session.getProcess().getVirtualMachineProxy().getVirtualMachine();
+        Optional<ThreadReference> thread = vm.allThreads().stream().filter(t ->
+                t.name().equals(ServerConfig.THREAD_NAME)).findFirst();
+        thread.ifPresent(ThreadReference::resume);
     }
 
-    private void occurrenceFound(XDebugSession session) {
-        ApplicationManager.getApplication().invokeLater(session::stepOut);
+    private void stepOutIfFound(DebuggerSession session) {
+        SuspendContextImpl context = session.getContextManager().getContext().getSuspendContext();
+        if (context == null || context.getEventSet() == null)
+            return;
+
+        boolean pausedByOurBreakpoint = context.getEventSet().stream().anyMatch(event ->
+                event instanceof ExceptionEvent
+                && ((ExceptionEvent) event).exception().type().name().equals(BREAKPOINT_CLASS));
+
+        if (pausedByOurBreakpoint)
+            ApplicationManager.getApplication().invokeLater(session::stepOut);
     }
 }

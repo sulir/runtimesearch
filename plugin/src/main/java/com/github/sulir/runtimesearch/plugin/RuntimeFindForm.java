@@ -1,5 +1,6 @@
 package com.github.sulir.runtimesearch.plugin;
 
+import com.github.sulir.runtimesearch.shared.SearchOptions;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.ComponentPopupBuilder;
@@ -38,7 +39,7 @@ public class RuntimeFindForm {
         }
 
         if (!popup.isVisible()) {
-            searchField.setText(RuntimeFindManager.getInstance(project).getSearchText());
+            load();
             popup.showCenteredInCurrentWindow(project);
         }
 
@@ -51,9 +52,18 @@ public class RuntimeFindForm {
         popup.cancel();
     }
 
+    private void load() {
+        SearchOptions options = RuntimeFindManager.getInstance(project).getOptions();
+        searchField.setText(options.getText());
+    }
+
+    private void save() {
+        SearchOptions options = RuntimeFindManager.getInstance(project).getOptions();
+        options.setText(searchField.getText());
+    }
+
     private void findButtonPressed() {
-        RuntimeFindManager manager = RuntimeFindManager.getInstance(project);
-        manager.setSearchText(searchField.getText());
-        manager.findNext();
+        save();
+        RuntimeFindManager.getInstance(project).findNext();
     }
 }

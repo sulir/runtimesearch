@@ -3,6 +3,13 @@ plugins {
     id 'org.jetbrains.changelog' version '1.1.2'
 }
 
+dependencies {
+    implementation project(':runtimesearch-shared')
+    runtimeOnly(project(':runtimesearch-agent')) {
+        transitive = false
+    }
+}
+
 def intellijVersions = ['2020.1.4', '2020.2.4', '2020.3.3', '2021.1']
 
 intellij {
@@ -34,12 +41,6 @@ patchPluginXml {
         changelog.getAll().collect {
             '<b>' + it.getKey() + '</b>' + it.getValue().toHTML()
         }.join()
-    }
-}
-
-dependencies {
-    runtimeOnly(project(':runtimesearch-agent')) {
-        transitive = false
     }
 }
 

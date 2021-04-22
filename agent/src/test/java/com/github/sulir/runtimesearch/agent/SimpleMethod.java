@@ -1,5 +1,6 @@
 package com.github.sulir.runtimesearch.agent;
 
+import com.github.sulir.runtimesearch.agent.transformer.ClassTransformer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.MethodNode;

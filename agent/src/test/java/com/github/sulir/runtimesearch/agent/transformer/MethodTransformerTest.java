@@ -1,8 +1,13 @@
-package com.github.sulir.runtimesearch.agent;
+package com.github.sulir.runtimesearch.agent.transformer;
 
+import com.github.sulir.runtimesearch.agent.ComparableInstruction;
+import com.github.sulir.runtimesearch.agent.SimpleMethod;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.*;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.VarInsnNode;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;

@@ -1,6 +1,7 @@
 package com.github.sulir.runtimesearch.plugin.config;
 
 import com.github.sulir.runtimesearch.plugin.RuntimeFindManager;
+import com.github.sulir.runtimesearch.shared.SearchOptions;
 import com.intellij.execution.RunConfigurationExtension;
 import com.intellij.execution.configurations.DebuggingRunnerData;
 import com.intellij.execution.configurations.JavaParameters;
@@ -28,6 +29,9 @@ public class RuntimeSearchRunConfigExtension extends RunConfigurationExtension {
             String agentPath = pluginPath.resolve("lib").resolve("runtimesearch-agent.jar").toString();
 
             params.getVMParametersList().add("-javaagent:" + agentPath + "=" + settings.getIncludePattern());
+
+            SearchOptions options = RuntimeFindManager.getInstance(configuration.getProject()).getOptions();
+            options.toProperties().forEach((key, value) -> params.getVMParametersList().addProperty(key, value));
         }
     }
 
