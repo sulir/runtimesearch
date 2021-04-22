@@ -1,6 +1,5 @@
 package com.github.sulir.runtimesearch.agent;
 
-import com.github.sulir.runtimesearch.shared.Check;
 import com.github.sulir.runtimesearch.shared.SearchOptions;
 import com.github.sulir.runtimesearch.shared.ServerConfig;
 

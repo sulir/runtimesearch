@@ -1,4 +1,7 @@
-package com.github.sulir.runtimesearch.shared;
+package com.github.sulir.runtimesearch.agent;
+
+import com.github.sulir.runtimesearch.shared.BreakpointError;
+import com.github.sulir.runtimesearch.shared.SearchOptions;
 
 public class Check {
     private static boolean active;
@@ -10,11 +13,8 @@ public class Check {
     }
 
     public static void initialize() {
-        try {
-            throw new BreakpointError();
-        } catch (BreakpointError e) {
-            // exception thrown to trigger a breakpoint in the IDE
-        }
+        SearchOptions options = SearchOptions.fromProperties(System.getProperties());
+        setOptions(options);
     }
 
     public static void perform(Object object) {

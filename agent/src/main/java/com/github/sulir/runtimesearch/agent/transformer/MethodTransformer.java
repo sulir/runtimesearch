@@ -1,8 +1,8 @@
 package com.github.sulir.runtimesearch.agent.transformer;
 
+import com.github.sulir.runtimesearch.agent.Check;
 import com.github.sulir.runtimesearch.agent.analyzer.StackAnalyzer;
 import com.github.sulir.runtimesearch.agent.analyzer.StringValue;
-import com.github.sulir.runtimesearch.shared.Check;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;

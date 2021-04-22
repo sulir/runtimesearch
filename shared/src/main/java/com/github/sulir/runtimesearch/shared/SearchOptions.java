@@ -1,8 +1,12 @@
 package com.github.sulir.runtimesearch.shared;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 public class SearchOptions implements Serializable {
+    public static final String PROPERTY_PREFIX = "runtimesearch.";
     private static final long serialVersionUID = 1L;
 
     private String text = "";
@@ -17,5 +21,17 @@ public class SearchOptions implements Serializable {
 
     public boolean isActive() {
         return !text.isEmpty();
+    }
+
+    public Map<String, String> toProperties() {
+        Map<String, String> result = new HashMap<>();
+        result.put(PROPERTY_PREFIX + "text", text);
+        return result;
+    }
+
+    public static SearchOptions fromProperties(Properties properties) {
+        SearchOptions options = new SearchOptions();
+        options.setText(properties.getProperty(PROPERTY_PREFIX + "text"));
+        return options;
     }
 }
