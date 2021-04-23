@@ -21,3 +21,7 @@ To build the project, run the command:
     ./gradlew build
 
 The resulting plugin will be stored in `dist/runtimesearch-plugin-*.zip`. It can be installed using the *Install Plugin from Disk* command in IntelliJ IDEA. Alternatively, you can run it in a sandbox via `./gradlew runIde`.
+
+## License
+
+This plugin is available under the [Apache License 2.0](https://github.com/sulir/runtimesearch/blob/master/LICENSE.txt). It uses the [ASM library](https://asm.ow2.io) released under the [3-Clause BSD License](https://github.com/sulir/runtimesearch/blob/master/agent/src/main/resources/META-INF/LICENSE-ASM.txt).

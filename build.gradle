@@ -55,4 +55,11 @@ subprojects {
     test {
         useJUnitPlatform()
     }
+
+    jar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        from (rootProject.file('LICENSE.txt')) {
+            into 'META-INF/'
+        }
+    }
 }
