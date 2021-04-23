@@ -20,6 +20,8 @@ dependencyUpdates {
 }
 
 allprojects {
+    group = 'com.github.sulir.runtimesearch'
+
     project.afterEvaluate {
         def release = (version =~ /(\d+.\d+).0/)
         version = release.matches() ? release.group(1) : 'snapshot'
@@ -30,8 +32,6 @@ allprojects {
 }
 
 subprojects {
-    group = 'com.github.sulir.runtimesearch'
-
     apply plugin: 'java'
     sourceCompatibility = 1.8
 
