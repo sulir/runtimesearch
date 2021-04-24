@@ -34,7 +34,7 @@ patchPluginXml {
         def description = lines.subList(start + 1, end).join('\n')
         String readme = org.jetbrains.changelog.ExtensionsKt.markdownToHTML(description)
 
-        '<p>Searches the given text in all string expressions of a debugged Java SE program.<p>' + readme
+        '<p>Searches the given text in all string expressions of a debugged Java SE program.<p>\n\n' + readme
     }
 
     changeNotes = {
