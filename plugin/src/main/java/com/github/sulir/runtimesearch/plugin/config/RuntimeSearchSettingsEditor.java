@@ -5,7 +5,6 @@ import com.intellij.debugger.ui.PatternFilterEditor;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.ui.TitledSeparator;
 import org.jetbrains.annotations.NotNull;
 
