@@ -29,6 +29,20 @@ To build the project, run the command:
 
 The resulting plugin will be stored in `dist/runtimesearch-plugin-*.zip`. It can be installed using the *Install Plugin from Disk* command in IntelliJ IDEA. Alternatively, you can run it in a sandbox via `./gradlew runIde`.
 
+## Internals
+
+The project consists of an IntelliJ IDEA plugin and a bytecode [instrumentation agent](https://docs.oracle.com/en/java/javase/11/docs/api/java.instrument/java/lang/instrument/package-summary.html). The initial configuration is passed from the IDE to the agent via command-line arguments when executing the target program:
+
+    java -javaagent:$RUNTIMESEARCH_PATH/dist/runtimesearch-agent.jar=$INCLUDE_PATTERN \
+        -Druntimesearch.text=$SEARCHED_TEXT \
+        -jar target.jar
+
+`$RUNTIMESEARCH_PATH` is the path to the RuntimeSearch project, `$INCLUDE_PATTERN` (optional) is a regular expression deciding which classes should be instrumented (e.g., `com\.example\..*`) and `$SEARCHED_TEXT` is the text to search.
+
+The agent inserts a call to a checking method after each instruction which can push a String to the stack. Further communication (e.g., a change of the searched text) is performed via sockets &ndash; see the source code for details.
+
+When an occurrence is found, a [BreakpointError](shared/src/main/java/com/github/sulir/runtimesearch/shared/BreakpointError.java) is thrown, and the program is suspended thanks to an exception breakpoint.
+
 ## License
 
-This plugin is available under the [Apache License 2.0](LICENSE.txt). It uses the [ASM library](https://asm.ow2.io) released under the [3-Clause BSD License](agent/src/main/resources/META-INF/LICENSE-ASM.txt).
+This software is available under the [Apache License 2.0](LICENSE.txt). It uses the [ASM library](https://asm.ow2.io) released under the [3-Clause BSD License](agent/src/main/resources/META-INF/LICENSE-ASM.txt).

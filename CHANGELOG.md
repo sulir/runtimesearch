@@ -2,6 +2,7 @@
 
 ## Unreleased
 - Searching can be started also when the program is suspended by the *Pause Program* action.
+- The initial searched text is now internally passed via a command-line argument (useful, e.g., for automation).
 
 ## 1.1
 - Improved IntelliJ version compatibility.
