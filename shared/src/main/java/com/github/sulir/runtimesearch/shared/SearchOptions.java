@@ -31,7 +31,11 @@ public class SearchOptions implements Serializable {
 
     public static SearchOptions fromProperties(Properties properties) {
         SearchOptions options = new SearchOptions();
-        options.setText(properties.getProperty(PROPERTY_PREFIX + "text"));
+
+        String text = properties.getProperty(PROPERTY_PREFIX + "text");
+        if (text != null)
+            options.setText(text);
+
         return options;
     }
 }
