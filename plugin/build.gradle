@@ -10,7 +10,7 @@ dependencies {
     }
 }
 
-def intellijVersions = ['2020.1.4', '2020.2.4', '2020.3.3', '2021.1']
+def intellijVersions = ['2020.1.4', '2020.2.4', '2020.3.3', '2021.1.1']
 
 intellij {
     version = intellijVersions.last()
