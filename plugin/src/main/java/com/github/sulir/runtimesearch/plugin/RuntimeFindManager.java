@@ -16,6 +16,7 @@ import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.util.SlowOperations;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebuggerManager;
 import com.intellij.xdebugger.XDebuggerUtil;
@@ -117,7 +118,7 @@ public class RuntimeFindManager {
         notification.setListener((n, event) -> {
             if (form != null)
                 form.hide();
-            new EditConfigurationsDialog(project).show();
+            SlowOperations.allowSlowOperations(() -> new EditConfigurationsDialog(project).show());
         });
 
         notification.notify(project);
