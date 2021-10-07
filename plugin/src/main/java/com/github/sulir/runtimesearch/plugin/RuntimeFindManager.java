@@ -14,7 +14,6 @@ import com.intellij.execution.impl.EditConfigurationsDialog;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.SlowOperations;
 import com.intellij.xdebugger.XDebugSession;
@@ -37,7 +36,7 @@ public class RuntimeFindManager {
     private final SearchOptions options = new SearchOptions();
 
     public static RuntimeFindManager getInstance(Project project) {
-        return ServiceManager.getService(project, RuntimeFindManager.class);
+        return project.getService(RuntimeFindManager.class);
     }
 
     public RuntimeFindManager(Project project) {
