@@ -14,13 +14,15 @@ import com.intellij.execution.impl.EditConfigurationsDialog;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
-import com.intellij.util.SlowOperations;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebuggerManager;
 import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XBreakpointManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -114,10 +116,14 @@ public class RuntimeFindManager {
         Notification notification = new Notification(NOTIFICATION_GROUP, Messages.get("error.disabled.title"),
                 Messages.get("error.disabled.content"), NotificationType.WARNING);
 
-        notification.setListener((n, event) -> {
-            if (form != null)
-                form.hide();
-            SlowOperations.allowSlowOperations(() -> new EditConfigurationsDialog(project).show());
+        notification.addAction(new AnAction(Messages.get("error.disabled.action")) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                if (form != null)
+                    form.hide();
+                new EditConfigurationsDialog(project).show();
+                notification.expire();
+            }
         });
 
         notification.notify(project);
