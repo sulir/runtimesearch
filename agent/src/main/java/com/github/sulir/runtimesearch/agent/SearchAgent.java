@@ -32,9 +32,9 @@ public class SearchAgent {
                 try {
                     if (className == null)
                         return null;
-                    className = className.replace('/', '.');
+                    String name = className.replace('/', '.');
 
-                    if (include.matcher(className).matches() && exclude.stream().noneMatch(className::startsWith))
+                    if (include.matcher(name).matches() && exclude.stream().noneMatch(name::startsWith))
                         return new ClassTransformer(className, classfileBuffer).transform();
                 } catch (Throwable e) {
                     e.printStackTrace();
