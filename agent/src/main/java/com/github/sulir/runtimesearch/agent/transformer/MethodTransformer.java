@@ -34,25 +34,25 @@ public class MethodTransformer implements Opcodes {
                 case GETSTATIC:
                 case GETFIELD:
                     if (analyzer.getStackTopAfter(i) == StringValue.MAYBE_STRING)
-                        instructions.insert(instruction, generateInstrumentation());
+                        instrument(instruction);
                     break;
                 case INVOKEVIRTUAL:
                 case INVOKESTATIC:
                 case INVOKEINTERFACE:
                     Type returnType = Type.getType(((MethodInsnNode) instruction).desc).getReturnType();
                     if (new ObjectType(returnType).canBeString())
-                        instructions.insert(instruction, generateInstrumentation());
+                        instrument(instruction);
                     break;
                 case INVOKEDYNAMIC:
                     returnType = Type.getType(((InvokeDynamicInsnNode) instruction).desc).getReturnType();
                     if (new ObjectType(returnType).canBeString())
-                        instructions.insert(instruction, generateInstrumentation());
+                        instrument(instruction);
                     break;
                 case INVOKESPECIAL:
                     MethodInsnNode invokespecial = (MethodInsnNode) instruction;
 
                     if (new ObjectType(Type.getType(invokespecial.desc).getReturnType()).canBeString())
-                        instructions.insert(instruction, generateInstrumentation());
+                        instrument(invokespecial);
                     else if (invokespecial.owner.equals(ObjectType.STRING) && invokespecial.name.equals("<init>"))
                         instrumentConstructor(invokespecial);
                     break;
@@ -61,13 +61,19 @@ public class MethodTransformer implements Opcodes {
         }
     }
 
+    private void instrument(AbstractInsnNode instruction) {
+        AbstractInsnNode dup = new InsnNode(Opcodes.DUP);
+        instructions.insert(instruction, dup);
+        instructions.insert(dup, generateInvokestatic());
+    }
+
     private void instrumentConstructor(MethodInsnNode invokespecial) {
         Type[] arguments = Type.getArgumentTypes(invokespecial.desc);
         InsnList copy = new InsnList();
 
         for (int i = arguments.length - 1; i >= 0; i--)
             copy.add(new VarInsnNode(arguments[i].getOpcode(Opcodes.ISTORE), method.maxLocals + i));
-        copy.add(generateDup());
+        copy.add(new InsnNode(Opcodes.DUP));
         for (int i = 0; i < arguments.length; i++)
             copy.add(new VarInsnNode(arguments[i].getOpcode(Opcodes.ILOAD), method.maxLocals + i));
 
@@ -75,20 +81,7 @@ public class MethodTransformer implements Opcodes {
         instructions.insert(invokespecial, generateInvokestatic());
     }
 
-    private AbstractInsnNode generateDup() {
-        return new InsnNode(Opcodes.DUP);
-    }
-
     private AbstractInsnNode generateInvokestatic() {
         return new MethodInsnNode(Opcodes.INVOKESTATIC, CHECK_CLASS, "perform", "(Ljava/lang/Object;)V");
-    }
-
-    private InsnList generateInstrumentation() {
-        InsnList instructions = new InsnList();
-
-        instructions.add(generateDup());
-        instructions.add(generateInvokestatic());
-
-        return instructions;
     }
 }
