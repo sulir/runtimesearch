@@ -38,4 +38,11 @@ public class SearchOptions implements Serializable {
 
         return options;
     }
+
+    public static void clearSystemProperties() {
+        for (String name : System.getProperties().stringPropertyNames()) {
+            if (name.startsWith(SearchOptions.PROPERTY_PREFIX))
+                System.clearProperty(name);
+        }
+    }
 }

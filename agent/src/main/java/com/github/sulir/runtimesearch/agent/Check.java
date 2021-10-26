@@ -15,6 +15,8 @@ public class Check {
     public static void initialize() {
         SearchOptions options = SearchOptions.fromProperties(System.getProperties());
         setOptions(options);
+
+        SearchOptions.clearSystemProperties();
     }
 
     public static void perform(Object object) {
