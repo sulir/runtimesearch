@@ -18,17 +18,34 @@ public class SearchAgent {
     );
 
     public static void premain(String agentArgs, Instrumentation inst) {
-        Check.initialize();
-        Server.getInstance().start();
+        SearchAgent agent = new SearchAgent();
+        agent.setupCommunication();
+        agent.fixJbossClassLoading();
 
         boolean filterSupplied = agentArgs != null && !agentArgs.isEmpty();
         Pattern include = Pattern.compile(filterSupplied ? agentArgs : ".*");
         List<String> exclude = filterSupplied ? Collections.emptyList() : defaultExclude;
+        agent.setupInstrumentation(inst, include, exclude);
+    }
 
-        inst.addTransformer(new ClassFileTransformer() {
+    private void setupCommunication() {
+        Check.initialize();
+        Server.getInstance().start();
+    }
+
+    private void fixJbossClassLoading() {
+        String SYSTEM_PACKAGES = "jboss.modules.system.pkgs";
+        String currentPackages = System.getProperty(SYSTEM_PACKAGES);
+        boolean isSet = currentPackages != null && !currentPackages.isEmpty();
+        String agentPackage = Check.class.getPackage().getName();
+        System.setProperty(SYSTEM_PACKAGES, isSet ? agentPackage : currentPackages + "," + agentPackage);
+    }
+
+    private void setupInstrumentation(Instrumentation instrumentation, Pattern include, List<String> exclude) {
+        instrumentation.addTransformer(new ClassFileTransformer() {
             @Override
             public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
-                    ProtectionDomain protectionDomain, byte[] classfileBuffer) {
+                                    ProtectionDomain protectionDomain, byte[] classfileBuffer) {
                 try {
                     if (className == null)
                         return null;
