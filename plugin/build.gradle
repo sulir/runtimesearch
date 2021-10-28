@@ -22,7 +22,7 @@ intellij {
 changelog {
     version = rootProject.version
     path = "${project.rootDir}/CHANGELOG.md"
-    headerParserRegex = /(\d+)\.(\d+)/
+    headerParserRegex = /(\d+\.\d+)/
     unreleasedTerm = 'Unreleased'
 }
 
