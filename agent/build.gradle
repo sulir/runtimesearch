@@ -1,3 +1,7 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.0'
+}
+
 dependencies {
     implementation 'org.ow2.asm:asm:9.2'
     implementation 'org.ow2.asm:asm-tree:9.2'
@@ -5,19 +9,26 @@ dependencies {
     implementation project(':runtimesearch-shared')
 }
 
-jar {
+def agentFileName = project.name + ".jar"
+
+shadowJar {
+    destinationDirectory = project.rootProject.file('dist')
+    archiveFileName = agentFileName
+    relocate 'org.objectweb.asm', 'com.github.sulir.runtimesearch.renamed.asm'
+
     manifest {
         attributes(
-            'Premain-Class': 'com.github.sulir.runtimesearch.agent.SearchAgent',
-            'Boot-Class-Path': archiveFileName
+                'Premain-Class': 'com.github.sulir.runtimesearch.agent.SearchAgent',
+                'Boot-Class-Path': agentFileName
         )
     }
-    from {
-        exclude '**/module-info.class'
-        configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    destinationDirectory = project.rootProject.file('dist')
-    archiveFileName = "${project.name}.jar"
+}
+
+jar {
+    destinationDirectory = shadowJar.destinationDirectory
+    archiveFileName = shadowJar.archiveFileName
+    enabled = false
+    dependsOn shadowJar
 }
 
 clean {
