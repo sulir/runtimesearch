@@ -41,6 +41,6 @@ for benchmark in "${benchmarks[@]}"; do
   text_search=$(run_text_search "$benchmark")
   text_search_percent=$(percentage "$plain" "$text_search")
 
-  printf "%-12s\t%5d\t%5d (%.1f%%)\t%5d (%.1f%%)\n" "$benchmark" "$plain" \
+  printf "%-12s\t%5d\t%5d (%.1f%%)\t%6d (%.1f%%)\n" "$benchmark" "$plain" \
     "$instrumented" "$instrumented_percent" "$text_search" "$text_search_percent"
 done

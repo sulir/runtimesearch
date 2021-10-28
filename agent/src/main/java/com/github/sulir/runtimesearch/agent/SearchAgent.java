@@ -14,7 +14,7 @@ public class SearchAgent {
     private static final List<String> defaultExclude = Arrays.asList(
             "com.sun.", "java.", "javax.", "jdk.", "sun.",
             "com.intellij.rt.", "org.jetbrains.capture.", "org.groovy.debug.", "groovyResetJarjarAsm.",
-            "org.objectweb.asm.", "com.github.sulir.runtimesearch."
+            "com.github.sulir.runtimesearch."
     );
 
     public static void premain(String agentArgs, Instrumentation inst) {
