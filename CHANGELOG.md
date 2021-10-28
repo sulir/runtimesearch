@@ -1,5 +1,10 @@
 # RuntimeSearch
 
+## 1.4
+- Fix VerifyError in the instrumented programs.
+- Prevent ClassNotFoundException in WildFly/JBoss.
+- Prevent IncompatibleClassChangeError in some projects using ASM (e.g., Geronimo).
+
 ## 1.3
 - Improved compatibility with new IntelliJ versions.
 - Minor bug fixes.
