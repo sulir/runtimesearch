@@ -1,6 +1,7 @@
 package com.github.sulir.runtimesearch.agent;
 
 import com.github.sulir.runtimesearch.agent.transformer.ClassTransformer;
+import com.github.sulir.runtimesearch.shared.SharedConfig;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class SearchAgent {
+    public static final Pattern NUMBER = Pattern.compile("\\d+");
     private static final List<String> defaultExclude = Arrays.asList(
             "com.sun.", "java.", "javax.", "jdk.", "sun.",
             "com.intellij.rt.", "org.jetbrains.capture.", "org.groovy.debug.", "groovyResetJarjarAsm.",
@@ -18,19 +20,17 @@ public class SearchAgent {
     );
 
     public static void premain(String agentArgs, Instrumentation inst) {
+        Check.initialize();
+        if (agentArgs != null && NUMBER.matcher(agentArgs).matches())
+            Server.getInstance().start(Integer.parseInt(agentArgs));
+
         SearchAgent agent = new SearchAgent();
-        agent.setupCommunication();
         agent.fixJbossClassLoading();
 
-        boolean filterSupplied = agentArgs != null && !agentArgs.isEmpty();
-        Pattern include = Pattern.compile(filterSupplied ? agentArgs : ".*");
-        List<String> exclude = filterSupplied ? Collections.emptyList() : defaultExclude;
+        String includeProperty = System.getProperty(SharedConfig.INCLUDE_PROPERTY, "");
+        Pattern include = Pattern.compile(includeProperty.isEmpty() ? ".*" : includeProperty);
+        List<String> exclude = includeProperty.isEmpty() ? defaultExclude : Collections.emptyList();
         agent.setupInstrumentation(inst, include, exclude);
-    }
-
-    private void setupCommunication() {
-        Check.initialize();
-        Server.getInstance().start();
     }
 
     private void fixJbossClassLoading() {

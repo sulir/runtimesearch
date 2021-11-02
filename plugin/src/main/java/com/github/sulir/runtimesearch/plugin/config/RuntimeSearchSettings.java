@@ -14,9 +14,11 @@ public class RuntimeSearchSettings {
     private static final Key<RuntimeSearchSettings> key = new Key<>(RuntimeSearchSettings.class.getPackage().getName());
     private static final String ENABLED = "enabled";
     private static final String INCLUDE_FILTERS = "includeFilter";
+    public static final String PORT = "port";
 
     private boolean enabled = false;
-    private ClassFilter[] includeFilters = new ClassFilter[0];
+    private ClassFilter[] includeFilters = ClassFilter.EMPTY_ARRAY;
+    private int port = 4321;
 
     public static RuntimeSearchSettings getOrCreate(RunConfigurationBase<?> runConfiguration) {
         return runConfiguration.putUserDataIfAbsent(key, new RuntimeSearchSettings());
@@ -46,13 +48,27 @@ public class RuntimeSearchSettings {
                 .collect(Collectors.joining("|"));
     }
 
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
     public void writeExternal(Element element) {
         element.setAttribute(ENABLED, String.valueOf(enabled));
         DebuggerUtilsEx.writeFilters(element, INCLUDE_FILTERS, includeFilters);
+        element.setAttribute(PORT, String.valueOf(port));
     }
 
     public void readExternal(Element element) {
-        enabled = Boolean.parseBoolean(element.getAttributeValue(ENABLED));
+        if (element.getAttribute(ENABLED) != null)
+            enabled = Boolean.parseBoolean(element.getAttributeValue(ENABLED));
+
         includeFilters = DebuggerUtilsEx.readFilters(element.getChildren(INCLUDE_FILTERS));
+
+        if (element.getAttribute(PORT) != null)
+            port = Integer.parseInt(element.getAttributeValue(PORT));
     }
 }

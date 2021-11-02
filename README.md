@@ -33,11 +33,12 @@ The resulting plugin will be stored in `dist/runtimesearch-plugin-*.zip`. It can
 
 The project consists of an IntelliJ IDEA plugin and a bytecode [instrumentation agent](https://docs.oracle.com/en/java/javase/11/docs/api/java.instrument/java/lang/instrument/package-summary.html). The initial configuration is passed from the IDE to the agent via command-line arguments when executing the target program:
 
-    java -javaagent:$RUNTIMESEARCH_PATH/dist/runtimesearch-agent.jar=$INCLUDE_PATTERN \
+    java -javaagent:$RUNTIMESEARCH_PATH/dist/runtimesearch-agent.jar=$PORT \
+        -Druntimesearch.include=$INCLUDE_PATTERN \
         -Druntimesearch.text=$SEARCHED_TEXT \
         -jar target.jar
 
-`$RUNTIMESEARCH_PATH` is the path to the RuntimeSearch project, `$INCLUDE_PATTERN` (optional) is a regular expression deciding which classes should be instrumented (e.g., `com\.example\..*`) and `$SEARCHED_TEXT` is the text to search.
+`$RUNTIMESEARCH_PATH` is the path to the RuntimeSearch project, `$PORT` is the server port where the agent should listen for commands, `$INCLUDE_PATTERN` (optional) is a regular expression deciding which classes should be instrumented (e.g., `com\.example\..*`) and `$SEARCHED_TEXT` is the text to search.
 
 The agent inserts a call to a checking method after each instruction which can push a String to the stack. Further communication (e.g., a change of the searched text) is performed via sockets &ndash; see the source code for details.
 

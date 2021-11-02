@@ -1,7 +1,7 @@
 package com.github.sulir.runtimesearch.agent;
 
 import com.github.sulir.runtimesearch.shared.SearchOptions;
-import com.github.sulir.runtimesearch.shared.ServerConfig;
+import com.github.sulir.runtimesearch.shared.SharedConfig;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,15 +18,15 @@ public class Server {
         return instance;
     }
 
-    public void start() {
+    public void start(int port) {
         try {
-            ServerSocket socket = new ServerSocket(ServerConfig.PORT, 0, InetAddress.getLoopbackAddress());
+            ServerSocket socket = new ServerSocket(port, 0, InetAddress.getLoopbackAddress());
 
             Thread thread = new Thread(() -> {
                 while (true) {
                     readOptions(socket);
                 }
-            }, ServerConfig.THREAD_NAME);
+            }, SharedConfig.SERVER_THREAD);
 
             thread.setDaemon(true);
             thread.start();
@@ -40,7 +40,7 @@ public class Server {
             Socket client = socket.accept();
             ObjectInputStream input = new ObjectInputStream(client.getInputStream());
             Check.setOptions((SearchOptions) input.readObject());
-            client.getOutputStream().write(ServerConfig.CONFIRMATION);
+            client.getOutputStream().write(SharedConfig.CONFIRMATION_BYTE);
             client.close();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

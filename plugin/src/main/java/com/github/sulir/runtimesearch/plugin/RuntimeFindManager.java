@@ -3,12 +3,12 @@ package com.github.sulir.runtimesearch.plugin;
 import com.github.sulir.runtimesearch.plugin.breakpoint.RuntimeBreakpointType;
 import com.github.sulir.runtimesearch.plugin.config.RuntimeSearchSettings;
 import com.github.sulir.runtimesearch.shared.SearchOptions;
-import com.github.sulir.runtimesearch.shared.ServerConfig;
 import com.intellij.execution.Executor;
 import com.intellij.execution.ProgramRunnerUtil;
 import com.intellij.execution.RunManager;
 import com.intellij.execution.RunnerAndConfigurationSettings;
 import com.intellij.execution.configurations.RunConfigurationBase;
+import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.executors.DefaultDebugExecutor;
 import com.intellij.execution.impl.EditConfigurationsDialog;
 import com.intellij.notification.Notification;
@@ -62,7 +62,7 @@ public class RuntimeFindManager {
             if (session == null) {
                 startDebugging();
             } else {
-                sendSearchText();
+                sendSearchText(session);
                 if (session.isPaused())
                     session.resume();
             }
@@ -92,9 +92,16 @@ public class RuntimeFindManager {
         ProgramRunnerUtil.executeConfiguration(selected, debugExecutor);
     }
 
-    public void sendSearchText() {
+    public void sendSearchText(XDebugSession session) {
+        RunProfile runProfile = session.getRunProfile();
+        if (!(runProfile instanceof RunConfigurationBase)) {
+            offerToEnablePlugin();
+            return;
+        }
+        int port = RuntimeSearchSettings.getOrCreate((RunConfigurationBase<?>) runProfile).getPort();
+
         try (
-                Socket client = new Socket(InetAddress.getLoopbackAddress(), ServerConfig.PORT);
+                Socket client = new Socket(InetAddress.getLoopbackAddress(), port);
                 ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream());
                 InputStream input = client.getInputStream()
         ) {

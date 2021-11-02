@@ -2,7 +2,7 @@ package com.github.sulir.runtimesearch.plugin.breakpoint;
 
 import com.github.sulir.runtimesearch.plugin.RuntimeFindManager;
 import com.github.sulir.runtimesearch.shared.BreakpointError;
-import com.github.sulir.runtimesearch.shared.ServerConfig;
+import com.github.sulir.runtimesearch.shared.SharedConfig;
 import com.intellij.debugger.engine.SuspendContextImpl;
 import com.intellij.debugger.impl.DebuggerManagerListener;
 import com.intellij.debugger.impl.DebuggerSession;
@@ -48,7 +48,7 @@ public class PauseHandler implements DebuggerManagerListener {
     private void resumeServerThread(DebuggerSession session) {
         VirtualMachine vm = session.getProcess().getVirtualMachineProxy().getVirtualMachine();
         Optional<ThreadReference> thread = vm.allThreads().stream().filter(t ->
-                t.name().equals(ServerConfig.THREAD_NAME)).findFirst();
+                t.name().equals(SharedConfig.SERVER_THREAD)).findFirst();
         thread.ifPresent(ThreadReference::resume);
     }
 
