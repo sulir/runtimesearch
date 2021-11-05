@@ -5,7 +5,7 @@ import com.intellij.debugger.ui.PatternFilterEditor;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
-import com.intellij.ui.TitledSeparator;
+import com.intellij.ui.PortField;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -17,8 +17,7 @@ public class RuntimeSearchSettingsEditor extends SettingsEditor<RunConfiguration
     private JPanel mainPanel;
     private JCheckBox enabledCheckBox;
     private PatternFilterEditor includeFilterEditor;
-    private TitledSeparator mainSeparator;
-    private JLabel includeLabel;
+    private PortField portField;
 
     public RuntimeSearchSettingsEditor(Project project) {
         this.project = project;
@@ -30,6 +29,7 @@ public class RuntimeSearchSettingsEditor extends SettingsEditor<RunConfiguration
 
         enabledCheckBox.setSelected(settings.isEnabled());
         includeFilterEditor.setFilters(settings.getIncludeFilters());
+        portField.setNumber(settings.getPort());
     }
 
     @Override
@@ -38,6 +38,7 @@ public class RuntimeSearchSettingsEditor extends SettingsEditor<RunConfiguration
 
         settings.setEnabled(enabledCheckBox.isSelected());
         settings.setIncludeFilters(includeFilterEditor.getFilters());
+        settings.setPort(portField.getNumber());
     }
 
     @Override
