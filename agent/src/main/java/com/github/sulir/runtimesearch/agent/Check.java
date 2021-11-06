@@ -4,13 +4,8 @@ import com.github.sulir.runtimesearch.shared.BreakpointError;
 import com.github.sulir.runtimesearch.shared.SearchOptions;
 
 public class Check {
+    private static TextSearch search;
     private static boolean active;
-    private static SearchOptions options;
-
-    public static void setOptions(SearchOptions options) {
-        Check.options = options;
-        active = options.isActive();
-    }
 
     public static void initialize() {
         SearchOptions options = SearchOptions.fromProperties(System.getProperties());
@@ -19,13 +14,19 @@ public class Check {
         SearchOptions.clearSystemProperties();
     }
 
+    public static void setOptions(SearchOptions options) {
+        Check.search = new TextSearch(options);
+        active = !options.getText().isEmpty();
+    }
+
     public static void perform(Object object) {
         if (!active)
             return;
 
         if (object instanceof String) {
             String string = (String) object;
-            if (string.contains(options.getText())) {
+
+            if (search.matches(string)) {
                 try {
                     active = false;
                     throw new BreakpointError();

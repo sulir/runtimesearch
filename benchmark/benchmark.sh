@@ -22,15 +22,21 @@ run_instrumented() {
   run_dacapo "$1" -javaagent:$runtimesearch_jar
 }
 
-run_text_search() {
-  run_dacapo "$1" -javaagent:$runtimesearch_jar -Druntimesearch.text=$searched_text
+run_case_sensitive() {
+  run_dacapo "$1" -javaagent:$runtimesearch_jar \
+    -Druntimesearch.text=$searched_text -Druntimesearch.case=true
+}
+
+run_case_insensitive() {
+  run_dacapo "$1" -javaagent:$runtimesearch_jar \
+    -Druntimesearch.text=$searched_text
 }
 
 percentage() {
   echo "$1" "$2" | awk '{print ($2-$1)/$1*100}'
 }
 
-printf "benchmark\tplain\tinstrumented\ttext search\n"
+printf "benchmark\tplain\tinstrumented\tcase-sensitive\tcase-insensitive\n"
 
 for benchmark in "${benchmarks[@]}"; do
   plain=$(run_dacapo "$benchmark")
@@ -38,9 +44,15 @@ for benchmark in "${benchmarks[@]}"; do
 
   instrumented=$(run_instrumented "$benchmark")
   instrumented_percent=$(percentage "$plain" "$instrumented")
-  text_search=$(run_text_search "$benchmark")
-  text_search_percent=$(percentage "$plain" "$text_search")
 
-  printf "%-12s\t%5d\t%5d (%.1f%%)\t%6d (%.1f%%)\n" "$benchmark" "$plain" \
-    "$instrumented" "$instrumented_percent" "$text_search" "$text_search_percent"
+  case_sensitive=$(run_case_sensitive "$benchmark")
+  case_sensitive_percent=$(percentage "$plain" "$case_sensitive")
+
+  case_insensitive=$(run_case_insensitive "$benchmark")
+  case_insensitive_percent=$(percentage "$plain" "$case_insensitive")
+
+  printf "%-12s\t%5d\t%5d (%.1f%%)\t%6d (%.1f%%)\t%6d (%.1f%%)\n" \
+    "$benchmark" "$plain" "$instrumented" "$instrumented_percent" \
+    "$case_sensitive" "$case_sensitive_percent" \
+    "$case_insensitive" "$case_insensitive_percent"
 done
