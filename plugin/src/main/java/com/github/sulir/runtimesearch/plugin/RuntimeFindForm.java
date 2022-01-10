@@ -17,6 +17,7 @@ public class RuntimeFindForm {
     private JTextField searchField;
     private JButton findButton;
     private JCheckBox matchCaseCheckBox;
+    private JCheckBox wholeWordsCheckBox;
 
     public RuntimeFindForm(Project project) {
         this.project = project;
@@ -57,12 +58,14 @@ public class RuntimeFindForm {
         SearchOptions options = RuntimeFindManager.getInstance(project).getOptions();
         searchField.setText(options.getText());
         matchCaseCheckBox.setSelected(options.isMatchCase());
+        wholeWordsCheckBox.setSelected(options.isWholeWords());
     }
 
     private void save() {
         SearchOptions options = RuntimeFindManager.getInstance(project).getOptions();
         options.setText(searchField.getText());
         options.setMatchCase(matchCaseCheckBox.isSelected());
+        options.setWholeWords(wholeWordsCheckBox.isSelected());
     }
 
     private void findButtonPressed() {
