@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ -z "$1" ]; then
+if [ ! -f "$1" ]; then
   echo "Usage: benchmark.sh dacapo_jar_path"
   exit 1
 fi
