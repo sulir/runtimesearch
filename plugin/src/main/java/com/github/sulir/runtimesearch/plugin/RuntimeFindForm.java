@@ -9,6 +9,7 @@ import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 
 import javax.swing.*;
+import java.awt.event.ItemEvent;
 
 public class RuntimeFindForm {
     private final Project project;
@@ -18,11 +19,21 @@ public class RuntimeFindForm {
     private JButton findButton;
     private JCheckBox matchCaseCheckBox;
     private JCheckBox wholeWordsCheckBox;
+    private JCheckBox regexCheckBox;
 
     public RuntimeFindForm(Project project) {
         this.project = project;
         searchField.addActionListener(e -> findButtonPressed());
         findButton.addActionListener(e -> findButtonPressed());
+
+        regexCheckBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                wholeWordsCheckBox.setSelected(false);
+                wholeWordsCheckBox.setEnabled(false);
+            } else if (e.getStateChange() == ItemEvent.DESELECTED) {
+                wholeWordsCheckBox.setEnabled(true);
+            }
+        });
     }
 
     public void show() {
@@ -59,6 +70,7 @@ public class RuntimeFindForm {
         searchField.setText(options.getText());
         matchCaseCheckBox.setSelected(options.isMatchCase());
         wholeWordsCheckBox.setSelected(options.isWholeWords());
+        regexCheckBox.setSelected(options.isRegex());
     }
 
     private void save() {
@@ -66,6 +78,7 @@ public class RuntimeFindForm {
         options.setText(searchField.getText());
         options.setMatchCase(matchCaseCheckBox.isSelected());
         options.setWholeWords(wholeWordsCheckBox.isSelected());
+        options.setRegex(regexCheckBox.isSelected());
     }
 
     private void findButtonPressed() {

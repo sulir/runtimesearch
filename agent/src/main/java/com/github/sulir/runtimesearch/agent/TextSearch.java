@@ -12,9 +12,12 @@ public class TextSearch {
 
     public TextSearch(SearchOptions options) {
         matchCase = options.isMatchCase();
+        int flags = matchCase ? 0 : Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE;
 
-        if (options.isWholeWords()) {
-            int flags = matchCase ? 0 : Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE;
+        if (options.isRegex()) {
+            pattern = Pattern.compile(options.getText(), flags);
+            needle = null;
+        } else if (options.isWholeWords()) {
             pattern = Pattern.compile("\\b" + Pattern.quote(options.getText()) + "\\b", flags);
             needle = null;
         } else {
