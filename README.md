@@ -18,7 +18,7 @@ Before using, open the Debug Configuration you would like to use via **Run | Edi
 
 To start searching, select **Run | Find in Runtime**, enter the searched string and press Find. If the program is not yet being debugged, a new process will be started. Then interact with the running application. As soon as any string expression in the program will contain the searched string (substrings are matched), the process will be paused. You can use traditional debugging actions (e.g., Step Over) or search for the next occurrence via **Run | Find Next in Runtime**.
 
-For a tutorial and sample use cases, watch the [video](https://sulir.github.io/runtimesearch/#video) or read the [paper](https://sulir.github.io/runtimesearch/#article).
+For a tutorial and sample use cases, please watch the [video](https://sulir.github.io/runtimesearch/#video) or read the [paper](https://sulir.github.io/runtimesearch/#article).
 <!--/plugin-desc-->
 
 ## Building from Source
@@ -31,7 +31,7 @@ The resulting plugin will be stored in `dist/runtimesearch-plugin-*.zip`. It can
 
 ## Internals
 
-The project consists of an IntelliJ IDEA plugin and a bytecode [instrumentation agent](https://docs.oracle.com/en/java/javase/11/docs/api/java.instrument/java/lang/instrument/package-summary.html). The initial configuration is passed from the IDE to the agent via command-line arguments when executing the target program:
+The project consists of an IntelliJ IDEA plugin and a bytecode [instrumentation agent](https://docs.oracle.com/en/java/javase/17/docs/api/java.instrument/java/lang/instrument/package-summary.html). The initial configuration is passed from the IDE to the agent via command-line arguments when executing the target program:
 
     java -javaagent:$RUNTIMESEARCH_PATH/dist/runtimesearch-agent.jar=$PORT \
         -Druntimesearch.include=$INCLUDE_PATTERN \
@@ -41,7 +41,7 @@ The project consists of an IntelliJ IDEA plugin and a bytecode [instrumentation 
         -Druntimesearch.regex=$REGEX \
         -jar target.jar
 
-`$RUNTIMESEARCH_PATH` is the path to the RuntimeSearch project, `$PORT` is the server port where the agent should listen for commands, `$INCLUDE_PATTERN` contains a regular expression deciding which classes should be instrumented (e.g., `com\.example\..*`), and `$TEXT` is the text to search. `$MATCH_CASE`, `$WHOLE_WORDS`, and `$REGEX` represent a searching options (true/false). The agent's argument and all system properties are optional.
+`$RUNTIMESEARCH_PATH` is the path to the RuntimeSearch project, `$PORT` is the server port where the agent should listen for commands, `$INCLUDE_PATTERN` contains a regular expression deciding which classes should be instrumented (e.g., `com\.example\..*`), and `$TEXT` is the text to search. `$MATCH_CASE`, `$WHOLE_WORDS`, and `$REGEX` represent a searching options (true/false; whole words and regex are mutually exclusive). The agent's argument and all system properties are optional.
 
 The agent inserts a call to a checking method after each instruction which can push a String to the stack. Further communication (e.g., a change of the searched text) is performed via sockets &ndash; see the source code for details.
 

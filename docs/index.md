@@ -2,7 +2,7 @@ RuntimeSearch is a debugger extension which searches the given text in the value
 
 ## Video
 
-**Note for plugin users:** The "Find in Runtime" action has recently been moved from the *Navigate* menu to the **Run** menu.
+**Note for plugin users:** The "Find in Runtime" action was moved from the *Navigate* menu to the **Run** menu.
 
 <video width="960" height="540" controls>
   <source src="video.mp4" type="video/mp4">
