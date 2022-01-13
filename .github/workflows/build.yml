@@ -26,13 +26,5 @@ jobs:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle-wrapper.properties') }}
 
-      - name: Cache Gradle Dependencies
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.pluginVerifier/ides
-          key: ${{ runner.os }}-gradle-cache-${{ hashFiles('**/*.gradle') }}
-
       - name: Build and Test the Plugin
         uses: ./.github/actions/gradle-build
