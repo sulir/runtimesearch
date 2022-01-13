@@ -1,9 +1,13 @@
 # RuntimeSearch
 
+## 2.0
+- Added search options: Match case, Whole words, Regex.
+- Server port can be modified in Debug Configurations.
+
 ## 1.4
-- Fix VerifyError in the instrumented programs.
-- Prevent ClassNotFoundException in WildFly/JBoss.
-- Prevent IncompatibleClassChangeError in some projects using ASM (e.g., Geronimo).
+- Fixed VerifyError in the instrumented programs.
+- Fixed ClassNotFoundException in WildFly/JBoss projects.
+- Fixed IncompatibleClassChangeError in some projects using ASM (e.g., Geronimo).
 
 ## 1.3
 - Improved compatibility with new IntelliJ versions.
