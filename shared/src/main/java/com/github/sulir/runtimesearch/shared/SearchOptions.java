@@ -18,7 +18,7 @@ public class SearchOptions implements Serializable {
     private boolean regex;
 
     public SearchOptions() {
-        this("", false, false, false);
+        this("", true, false, false);
     }
 
     public SearchOptions(String text, boolean matchCase, boolean wholeWords, boolean regex) {

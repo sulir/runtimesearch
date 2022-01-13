@@ -41,7 +41,7 @@ The project consists of an IntelliJ IDEA plugin and a bytecode [instrumentation 
         -Druntimesearch.regex=$REGEX \
         -jar target.jar
 
-`$RUNTIMESEARCH_PATH` is the path to the RuntimeSearch project, `$PORT` is the server port where the agent should listen for commands, `$INCLUDE_PATTERN` contains a regular expression deciding which classes should be instrumented (e.g., `com\.example\..*`), and `$TEXT` is the text to search. `$MATCH_CASE`, `$WHOLE_WORDS`, and `$REGEX` represent a searching options (true/false; whole words and regex are mutually exclusive). The agent's argument and all system properties are optional.
+`$RUNTIMESEARCH_PATH` is the path to the RuntimeSearch project, `$PORT` is the server port where the agent should listen for commands, `$INCLUDE_PATTERN` contains a regular expression deciding which classes should be instrumented (e.g., `com\.example\..*`), and `$TEXT` is the text to search. `$MATCH_CASE` has the value of true by default, `$WHOLE_WORDS` and `$REGEX` false (mutually exclusive). The agent's argument and all system properties are optional.
 
 The agent inserts a call to a checking method after each instruction which can push a String to the stack. Further communication (e.g., a change of the searched text) is performed via sockets &ndash; see the source code for details.
 

@@ -24,12 +24,12 @@ run_instrumented() {
 
 run_case_sensitive() {
   run_dacapo "$1" -javaagent:$runtimesearch_jar \
-    -Druntimesearch.text=$searched_text -Druntimesearch.case=true
+    -Druntimesearch.text=$searched_text
 }
 
 run_case_insensitive() {
   run_dacapo "$1" -javaagent:$runtimesearch_jar \
-    -Druntimesearch.text=$searched_text
+    -Druntimesearch.text=$searched_text -Druntimesearch.case=false
 }
 
 percentage() {
