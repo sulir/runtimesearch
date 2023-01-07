@@ -1,6 +1,6 @@
 plugins {
     id 'fr.brouillard.oss.gradle.jgitver' version '0.9.1'
-    id 'com.github.ben-manes.versions' version '0.41.0'
+    id 'com.github.ben-manes.versions' version '0.44.0'
     id 'se.patrikerdes.use-latest-versions' version '0.2.18'
 }
 
@@ -48,8 +48,8 @@ subprojects {
     }
 
     dependencies {
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
     }
 
     test {
