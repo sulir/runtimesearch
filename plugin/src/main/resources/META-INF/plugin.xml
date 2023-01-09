@@ -3,7 +3,6 @@
     <name>RuntimeSearch</name>
     <vendor url="https://sulir.github.io" email="matus.sulir@gmail.com">Matúš Sulír</vendor>
 
-    <idea-version since-build="201.6668.113"/>
     <depends>com.intellij.modules.java</depends>
     <resource-bundle>messages</resource-bundle>
 
