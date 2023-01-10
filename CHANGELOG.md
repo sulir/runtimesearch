@@ -1,5 +1,9 @@
 # RuntimeSearch
 
+## 2.1
+- IntelliJ IDEA 2020.3 or newer is now required.
+- Menu items are enabled also during indexing.
+
 ## 2.0
 - Added search options: Match case, Whole words, Regex.
 - Server port can be modified in Debug Configurations.
