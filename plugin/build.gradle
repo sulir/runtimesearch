@@ -46,7 +46,8 @@ patchPluginXml {
 
     changeNotes = {
         changelog.getAll().collect {
-            '<b>' + it.getKey() + '</b>' + changelog.renderItem(it.getValue(), Changelog.OutputType.HTML)
+            '<b>' + it.getKey() + '</b>' + changelog.renderItem(it.getValue().withHeader(false),
+                    Changelog.OutputType.HTML)
         }.join()
     }()
 }
