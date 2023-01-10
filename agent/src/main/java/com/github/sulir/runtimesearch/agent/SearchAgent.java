@@ -19,6 +19,7 @@ public class SearchAgent {
             "com.github.sulir.runtimesearch."
     );
 
+    @SuppressWarnings("unused") // Java agent entry point
     public static void premain(String agentArgs, Instrumentation inst) {
         Check.initialize();
         if (agentArgs != null && NUMBER.matcher(agentArgs).matches())

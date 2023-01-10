@@ -27,7 +27,7 @@ To build the project, run the command:
 
     ./gradlew build
 
-The resulting plugin will be stored in `dist/runtimesearch-plugin-*.zip`. It can be installed using the *Install Plugin from Disk* command in IntelliJ IDEA. Alternatively, you can run it in a sandbox via `./gradlew runIde`.
+The resulting plugin will be stored in `dist/runtimesearch-plugin-*.zip`. It can be installed using the "Install Plugin from Disk" command in IntelliJ IDEA. Alternatively, you can run it in a sandbox via `./gradlew runIde`.
 
 ## Internals
 

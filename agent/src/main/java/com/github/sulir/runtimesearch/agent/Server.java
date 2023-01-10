@@ -19,20 +19,17 @@ public class Server {
     }
 
     public void start(int port) {
-        try {
-            ServerSocket socket = new ServerSocket(port, 0, InetAddress.getLoopbackAddress());
-
-            Thread thread = new Thread(() -> {
+        Thread thread = new Thread(() -> {
+            try (ServerSocket socket = new ServerSocket(port, 0, InetAddress.getLoopbackAddress())) {
                 while (true) {
                     readOptions(socket);
                 }
-            }, SharedConfig.SERVER_THREAD);
-
-            thread.setDaemon(true);
-            thread.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }, SharedConfig.SERVER_THREAD);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     private void readOptions(ServerSocket socket) {
