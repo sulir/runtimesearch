@@ -9,10 +9,10 @@
     <actions>
         <group id="RuntimeSearchMenu">
             <separator/>
-            <action id="RuntimeFind" class="com.github.sulir.runtimesearch.plugin.RuntimeFindAction">
+            <action id="RuntimeFind" class="com.github.sulir.runtimesearch.plugin.actions.RuntimeFindAction">
                 <keyboard-shortcut keymap="$default" first-keystroke="shift alt F2"/>
             </action>
-            <action id="RuntimeFindNext" class="com.github.sulir.runtimesearch.plugin.RuntimeFindNextAction">
+            <action id="RuntimeFindNext" class="com.github.sulir.runtimesearch.plugin.actions.RuntimeFindNextAction">
                 <keyboard-shortcut keymap="$default" first-keystroke="shift alt F3"/>
             </action>
             <add-to-group group-id="RunMenu" anchor="last"/>
