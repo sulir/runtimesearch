@@ -8,15 +8,12 @@ import com.intellij.execution.configurations.DebuggingRunnerData;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RunnerSettings;
-import com.intellij.ide.plugins.PluginManager;
-import com.intellij.ide.plugins.PluginManagerCore;
-import com.intellij.openapi.extensions.PluginId;
+import com.intellij.ide.plugins.cl.PluginAwareClassLoader;
 import com.intellij.openapi.options.SettingsEditor;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
-import java.util.Objects;
 
 public class RuntimeSearchRunConfigExtension extends RunConfigurationExtension {
     @Override
@@ -25,8 +22,8 @@ public class RuntimeSearchRunConfigExtension extends RunConfigurationExtension {
         RuntimeSearchSettings settings = RuntimeSearchSettings.getOrCreate(configuration);
 
         if (settings.isEnabled() && runnerSettings instanceof DebuggingRunnerData) {
-            PluginId pluginId = PluginManager.getPluginByClassName(RuntimeFindManager.class.getName());
-            Path pluginPath = Objects.requireNonNull(PluginManagerCore.getPlugin(pluginId)).getPluginPath();
+            PluginAwareClassLoader thisLoader = (PluginAwareClassLoader) this.getClass().getClassLoader();
+            Path pluginPath = thisLoader.getPluginDescriptor().getPluginPath();
             String agentPath = pluginPath.resolve("lib").resolve("runtimesearch-agent.jar").toString();
 
             params.getVMParametersList().add("-javaagent:" + agentPath + "=" + settings.getPort());
