@@ -1,11 +1,11 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 dependencies {
-    implementation 'org.ow2.asm:asm:9.4'
-    implementation 'org.ow2.asm:asm-tree:9.4'
-    implementation 'org.ow2.asm:asm-analysis:9.4'
+    implementation 'org.ow2.asm:asm:9.7.1'
+    implementation 'org.ow2.asm:asm-tree:9.7.1'
+    implementation 'org.ow2.asm:asm-analysis:9.7.1'
     implementation project(':runtimesearch-shared')
 }
 
