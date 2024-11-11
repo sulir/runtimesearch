@@ -8,6 +8,9 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
+      - name: Free Disk Space
+        uses: jlumbroso/free-disk-space@v1.3.1
+
       - name: Fetch Sources
         uses: actions/checkout@v3
 
