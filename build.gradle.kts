@@ -39,6 +39,9 @@ allprojects {
 subprojects {
     apply(plugin = "java")
     java.sourceCompatibility = JavaVersion.VERSION_1_8
+    tasks.compileJava {
+        options.compilerArgs.add("-Xlint:-options")
+    }
 
     apply(plugin = "idea")
     idea {
