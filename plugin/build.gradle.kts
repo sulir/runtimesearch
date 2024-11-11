@@ -24,12 +24,15 @@ dependencies {
         intellijIdeaCommunity("2024.2.4")
         bundledPlugin("com.intellij.java")
         instrumentationTools()
+        pluginVerifier()
     }
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 intellijPlatform {
+    buildSearchableOptions = false
+
     pluginConfiguration {
         description = run {
             val lines = rootProject.file("README.md").readLines()
