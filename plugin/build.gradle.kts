@@ -80,6 +80,10 @@ changelog {
     unreleasedTerm = "Unreleased"
 }
 
+tasks.assemble {
+    dependsOn(tasks.buildPlugin)
+}
+
 tasks.buildPlugin {
     dependsOn(":runtimesearch-agent:jar")
     destinationDirectory = project.rootProject.file("dist")
