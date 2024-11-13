@@ -29,11 +29,17 @@ dependencies {
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_17
+val lowestBuild = "223"
 
 intellijPlatform {
     buildSearchableOptions = false
 
     pluginConfiguration {
+        ideaVersion {
+            sinceBuild = lowestBuild
+            untilBuild = provider { null }
+        }
+
         description = run {
             val lines = rootProject.file("README.md").readLines()
             val start = lines.indexOf("<!--plugin-desc-->")
@@ -56,7 +62,7 @@ intellijPlatform {
             select {
                 types = listOf(IntelliJPlatformType.IntellijIdeaCommunity)
                 channels = listOf(ProductRelease.Channel.RELEASE)
-                sinceBuild = "223"
+                sinceBuild = lowestBuild
             }
         }
     }
