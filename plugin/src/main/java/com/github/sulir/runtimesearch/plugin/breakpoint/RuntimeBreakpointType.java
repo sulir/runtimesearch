@@ -6,6 +6,7 @@ import com.intellij.debugger.ui.breakpoints.ExceptionBreakpoint;
 import com.intellij.debugger.ui.breakpoints.JavaBreakpointType;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XBreakpointType;
 import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
@@ -56,7 +57,10 @@ public class RuntimeBreakpointType
 
     @Override
     public JavaExceptionBreakpointProperties createProperties() {
-        return new JavaExceptionBreakpointProperties(BREAKPOINT_CLASS);
+        JavaExceptionBreakpointProperties properties = new JavaExceptionBreakpointProperties();
+        properties.myQualifiedName = BREAKPOINT_CLASS;
+        properties.myPackageName = StringUtil.getPackageName(BREAKPOINT_CLASS);
+        return properties;
     }
 
     @NotNull
