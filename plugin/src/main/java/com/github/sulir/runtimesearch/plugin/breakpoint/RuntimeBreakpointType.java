@@ -56,7 +56,7 @@ public class RuntimeBreakpointType
 
     @Override
     public JavaExceptionBreakpointProperties createProperties() {
-        return new JavaExceptionBreakpointProperties(BREAKPOINT_CLASS, "");
+        return new JavaExceptionBreakpointProperties(BREAKPOINT_CLASS);
     }
 
     @NotNull
