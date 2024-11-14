@@ -1,5 +1,8 @@
 # RuntimeSearch
 
+## 2.2
+- The plugin is now compatible with IntelliJ IDEA 2022.3-2024.3.
+
 ## 2.1
 - IntelliJ IDEA 2020.3 or newer is now required.
 - Menu items are enabled also during indexing.
