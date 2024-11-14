@@ -75,13 +75,12 @@ public class RuntimeFindManager {
 
     public void startDebugging() {
         RunnerAndConfigurationSettings selected = RunManager.getInstance(project).getSelectedConfiguration();
-        if (selected == null || !(selected.getConfiguration() instanceof RunConfigurationBase)) {
+        if (selected == null || !(selected.getConfiguration() instanceof RunConfigurationBase<?> configuration)) {
             Notifications.Bus.notify(new Notification(NOTIFICATION_GROUP, Messages.get("error.no.config.title"),
                     Messages.get("error.no.config.content"), NotificationType.ERROR));
             return;
         }
 
-        RunConfigurationBase<?> configuration = (RunConfigurationBase<?>) selected.getConfiguration();
         RuntimeSearchSettings settings = RuntimeSearchSettings.getOrCreate(configuration);
         if (!settings.isEnabled()) {
             offerToEnablePlugin();

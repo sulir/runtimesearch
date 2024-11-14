@@ -9,10 +9,13 @@ import java.security.ProtectionDomain;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 public class SearchAgent {
-    public static final Pattern NUMBER = Pattern.compile("\\d+");
+    private static final Logger logger = Logger.getLogger(SearchAgent.class.getName());
+    private static final Pattern NUMBER = Pattern.compile("\\d+");
     private static final List<String> defaultExclude = Arrays.asList(
             "com.sun.", "java.", "javax.", "jdk.", "sun.",
             "com.intellij.rt.", "org.jetbrains.capture.", "org.groovy.debug.", "groovyResetJarjarAsm.",
@@ -55,7 +58,7 @@ public class SearchAgent {
                     if (include.matcher(name).matches() && exclude.stream().noneMatch(name::startsWith))
                         return new ClassTransformer(className, classfileBuffer).transform();
                 } catch (Throwable e) {
-                    e.printStackTrace();
+                    logger.log(Level.WARNING, "Failed to transform class " + className, e);
                 }
 
                 return null;

@@ -123,9 +123,10 @@ public class IsStringInterpreter extends Interpreter<StringValue> implements Opc
 
     @Override
     public StringValue naryOperation(AbstractInsnNode insn, List<? extends StringValue> values) {
+        String descriptor;
         switch (insn.getOpcode()) {
             case MULTIANEWARRAY:
-                String descriptor = ((MultiANewArrayInsnNode) insn).desc;
+                descriptor = ((MultiANewArrayInsnNode) insn).desc;
                 return newValue(Type.getType(descriptor));
             case INVOKEDYNAMIC:
                 descriptor = ((InvokeDynamicInsnNode) insn).desc;

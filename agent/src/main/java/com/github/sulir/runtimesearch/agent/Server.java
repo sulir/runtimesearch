@@ -8,8 +8,10 @@ import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Logger;
 
 public class Server {
+    private static final Logger logger = Logger.getLogger(Server.class.getName());
     private static final Server instance = new Server();
 
     private Server() { }
@@ -25,7 +27,7 @@ public class Server {
                     readOptions(socket);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.warning("Failed to start RuntimeSearch server at port " + port + ": " + e.getMessage());
             }
         }, SharedConfig.SERVER_THREAD);
         thread.setDaemon(true);
@@ -40,7 +42,7 @@ public class Server {
             client.getOutputStream().write(SharedConfig.CONFIRMATION_BYTE);
             client.close();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.warning("Failed to read RuntimeSearch options: " + e.getMessage());
         }
     }
 }

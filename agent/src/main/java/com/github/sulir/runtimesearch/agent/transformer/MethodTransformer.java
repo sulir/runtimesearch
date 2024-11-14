@@ -27,6 +27,7 @@ public class MethodTransformer implements Opcodes {
 
         int i = 0;
         for (AbstractInsnNode instruction : instructions) {
+            Type returnType;
             switch (instruction.getOpcode()) {
                 case LDC:
                 case ALOAD:
@@ -39,7 +40,7 @@ public class MethodTransformer implements Opcodes {
                 case INVOKEVIRTUAL:
                 case INVOKESTATIC:
                 case INVOKEINTERFACE:
-                    Type returnType = Type.getType(((MethodInsnNode) instruction).desc).getReturnType();
+                    returnType = Type.getType(((MethodInsnNode) instruction).desc).getReturnType();
                     if (new ObjectType(returnType).canBeString())
                         instrument(instruction);
                     break;

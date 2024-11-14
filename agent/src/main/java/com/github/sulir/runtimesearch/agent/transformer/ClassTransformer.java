@@ -4,8 +4,12 @@ import org.objectweb.asm.*;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class ClassTransformer {
     public static final int ASM_VERSION = Opcodes.ASM9;
+    private static final Logger logger = Logger.getLogger(ClassTransformer.class.getName());
 
     private final String className;
     private final byte[] bytes;
@@ -31,7 +35,7 @@ public class ClassTransformer {
                             if (instructions.size() != 0 && (access & Opcodes.ACC_SYNTHETIC) == 0)
                                 new MethodTransformer(className, this).transform();
                         } catch (AnalyzerException e) {
-                            e.printStackTrace();
+                            logger.log(Level.WARNING, "Failed to transform method " + name + " in " + className, e);
                         }
 
                         accept(methodVisitor);
