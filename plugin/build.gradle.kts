@@ -21,7 +21,7 @@ dependencies {
     }
 
     intellijPlatform {
-        intellijIdeaCommunity("2024.2.4")
+        intellijIdeaCommunity("2024.3")
         bundledPlugin("com.intellij.java")
         instrumentationTools()
         pluginVerifier()
