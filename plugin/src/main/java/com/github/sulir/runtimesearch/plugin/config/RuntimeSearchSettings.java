@@ -1,6 +1,6 @@
 package com.github.sulir.runtimesearch.plugin.config;
 
-import com.intellij.debugger.impl.DebuggerUtilsEx;
+import com.intellij.debugger.settings.DebuggerSettingsUtils;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.openapi.util.Key;
 import com.intellij.ui.classFilter.ClassFilter;
@@ -58,7 +58,7 @@ public class RuntimeSearchSettings {
 
     public void writeExternal(Element element) {
         element.setAttribute(ENABLED, String.valueOf(enabled));
-        DebuggerUtilsEx.writeFilters(element, INCLUDE_FILTERS, includeFilters);
+        DebuggerSettingsUtils.writeFilters(element, INCLUDE_FILTERS, includeFilters);
         element.setAttribute(PORT, String.valueOf(port));
     }
 
@@ -66,7 +66,7 @@ public class RuntimeSearchSettings {
         if (element.getAttribute(ENABLED) != null)
             enabled = Boolean.parseBoolean(element.getAttributeValue(ENABLED));
 
-        includeFilters = DebuggerUtilsEx.readFilters(element.getChildren(INCLUDE_FILTERS));
+        includeFilters = DebuggerSettingsUtils.readFilters(element.getChildren(INCLUDE_FILTERS));
 
         if (element.getAttribute(PORT) != null)
             port = Integer.parseInt(element.getAttributeValue(PORT));
