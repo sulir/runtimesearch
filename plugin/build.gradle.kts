@@ -4,8 +4,8 @@ import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.models.ProductRelease
 
 plugins {
-    id("org.jetbrains.intellij.platform") version "2.7.0"
-    id("org.jetbrains.changelog") version "2.3.0"
+    id("org.jetbrains.intellij.platform")
+    id("org.jetbrains.changelog")
 }
 
 repositories {
@@ -21,7 +21,7 @@ dependencies {
     }
 
     intellijPlatform {
-        intellijIdeaCommunity("2025.1.4.1")
+        intellijIdeaCommunity("_")
         bundledPlugin("com.intellij.java")
         pluginVerifier()
     }

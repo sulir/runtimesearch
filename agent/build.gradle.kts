@@ -1,11 +1,11 @@
 plugins {
-    id("com.gradleup.shadow") version "8.3.8"
+    id("com.gradleup.shadow")
 }
 
 dependencies {
-    implementation("org.ow2.asm:asm:9.7.1")
-    implementation("org.ow2.asm:asm-tree:9.7.1")
-    implementation("org.ow2.asm:asm-analysis:9.7.1")
+    implementation("org.ow2.asm:asm:_")
+    implementation("org.ow2.asm:asm-tree:_")
+    implementation("org.ow2.asm:asm-analysis:_")
     implementation(project(":runtimesearch-shared"))
 }
 

@@ -3,9 +3,7 @@ import fr.brouillard.oss.gradle.plugins.JGitverPluginExtensionBranchPolicy
 plugins {
     java
     idea
-    id("fr.brouillard.oss.gradle.jgitver") version "0.9.1"
-    id("com.github.ben-manes.versions") version "0.51.0"
-    id("se.patrikerdes.use-latest-versions") version "0.2.18"
+    id("fr.brouillard.oss.gradle.jgitver")
 }
 
 jgitver {
@@ -17,13 +15,6 @@ jgitver {
     policies.add(policy)
 }
 
-tasks.dependencyUpdates {
-    revision = "release"
-    rejectVersionIf {
-        candidate.version.contains("-")
-    }
-}
-
 allprojects {
     group = "com.github.sulir.runtimesearch"
 
@@ -31,9 +22,6 @@ allprojects {
         val release = "(\\d+.\\d+).0".toRegex().matchEntire(version.toString())
         version = if (release != null) release.groups[1]!!.value else "snapshot"
     }
-
-    apply(plugin = "se.patrikerdes.use-latest-versions")
-    apply(plugin = "com.github.ben-manes.versions")
 }
 
 subprojects {
@@ -56,8 +44,8 @@ subprojects {
     }
 
     dependencies {
-        testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
-        testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.11.3")
+        testImplementation("org.junit.jupiter:junit-jupiter:_")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher:_")
     }
 
     tasks.test {
