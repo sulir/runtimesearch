@@ -46,6 +46,7 @@ subprojects {
     dependencies {
         testImplementation("org.junit.jupiter:junit-jupiter:_")
         testRuntimeOnly("org.junit.platform:junit-platform-launcher:_")
+        testRuntimeOnly("junit:junit:_")
     }
 
     tasks.test {
