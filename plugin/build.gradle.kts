@@ -28,7 +28,7 @@ dependencies {
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_17
-val lowestBuild = "223"
+val lowestBuild = "251"
 
 intellijPlatform {
     buildSearchableOptions = false
