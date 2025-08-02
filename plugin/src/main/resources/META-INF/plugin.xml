@@ -1,10 +1,10 @@
 <idea-plugin url="https://sulir.github.io/runtimesearch/">
     <id>com.github.sulir.runtimesearch</id>
     <name>RuntimeSearch</name>
-    <vendor url="https://sulir.github.io" email="matus.sulir@gmail.com">Matúš Sulír</vendor>
+    <vendor email="matus.sulir@gmail.com" url="https://sulir.github.io">Matúš Sulír</vendor>
 
     <depends>com.intellij.modules.java</depends>
-    <resource-bundle>messages</resource-bundle>
+    <resource-bundle>messages.Bundle</resource-bundle>
 
     <actions>
         <group id="RuntimeSearchMenu">
