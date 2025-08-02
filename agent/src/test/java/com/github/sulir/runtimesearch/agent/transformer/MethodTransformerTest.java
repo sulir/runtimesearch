@@ -25,7 +25,7 @@ public class MethodTransformerTest {
     @Test
     public void stringLdcAndAloadAreInstrumented() throws AnalyzerException {
         SimpleMethod method = new SimpleMethod(ldc, astore, aload, pop, ret);
-        new MethodTransformer(method.getClassName(), method).transform();
+        new MethodTransformer(SimpleMethod.CLASS, method).transform();
 
         Object[] expectedResult = new Object[] {ldc, dup, invokestatic, astore, aload, dup, invokestatic, pop, ret};
         assertArrayEquals(expectedResult, method.getInstructions());
@@ -35,7 +35,7 @@ public class MethodTransformerTest {
     public void nullAloadIsNotInstrumented() throws AnalyzerException {
         SimpleMethod method = new SimpleMethod(aconstNull, astore, aload, pop, ret);
         AbstractInsnNode[] expectedUnchanged = method.getInstructions();
-        new MethodTransformer(method.getClassName(), method).transform();
+        new MethodTransformer(SimpleMethod.CLASS, method).transform();
 
         assertArrayEquals(expectedUnchanged, method.getInstructions());
     }

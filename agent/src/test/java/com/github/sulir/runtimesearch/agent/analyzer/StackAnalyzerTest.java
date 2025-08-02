@@ -23,7 +23,7 @@ public class StackAnalyzerTest {
     public void stackTopAfterStringGetstaticIsString() throws AnalyzerException {
         SimpleMethod method = new SimpleMethod(getstatic, pop, ret);
 
-        StackAnalyzer analyzer = new StackAnalyzer(method.getClassName(), method);
+        StackAnalyzer analyzer = new StackAnalyzer(SimpleMethod.CLASS, method);
         analyzer.analyze();
 
         StringValue stackTopAfterGetstatic = analyzer.getStackTopAfter(0);
@@ -34,7 +34,7 @@ public class StackAnalyzerTest {
     public void stackTopAfterStringAaloadIsString() throws AnalyzerException {
         SimpleMethod method = new SimpleMethod(invokestatic, iconst0, aaload, pop, ret);
 
-        StackAnalyzer analyzer = new StackAnalyzer(method.getClassName(), method);
+        StackAnalyzer analyzer = new StackAnalyzer(SimpleMethod.CLASS, method);
         analyzer.analyze();
 
         assertEquals(StringValue.newMaybeStringArray(1), analyzer.getStackTopAfter(0));

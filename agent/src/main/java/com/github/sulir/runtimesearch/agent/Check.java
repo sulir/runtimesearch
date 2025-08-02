@@ -19,6 +19,7 @@ public class Check {
         active = !options.getText().isEmpty();
     }
 
+    @SuppressWarnings("unused")
     public static void perform(Object object) {
         if (!active)
             return;

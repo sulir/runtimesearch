@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("unused")
 public class SearchAgent {
     private static final Logger logger = Logger.getLogger(SearchAgent.class.getName());
     private static final Pattern NUMBER = Pattern.compile("\\d+");
@@ -22,7 +23,7 @@ public class SearchAgent {
             "com.github.sulir.runtimesearch."
     );
 
-    @SuppressWarnings("unused") // Java agent entry point
+    @SuppressWarnings("unused")
     public static void premain(String agentArgs, Instrumentation inst) {
         Check.initialize();
         if (agentArgs != null && NUMBER.matcher(agentArgs).matches())
