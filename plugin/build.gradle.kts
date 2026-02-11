@@ -21,13 +21,13 @@ dependencies {
     }
 
     intellijPlatform {
-        intellijIdeaCommunity("_")
+        intellijIdea("2025.3.2")
         bundledPlugin("com.intellij.java")
         pluginVerifier()
     }
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_21
 val lowestBuild = "251"
 
 intellijPlatform {
