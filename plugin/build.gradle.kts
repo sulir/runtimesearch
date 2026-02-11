@@ -90,6 +90,7 @@ tasks.buildPlugin {
 
 tasks.runIde {
     dependsOn(":runtimesearch-agent:jar")
+    jvmArgs("-Didea.load.plugins.id=!org.jetbrains.plugins.kubernetes")
 }
 
 tasks.clean {
