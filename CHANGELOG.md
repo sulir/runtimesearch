@@ -1,5 +1,8 @@
 # RuntimeSearch
 
+## 2.3
+- Compatibility was set to IntelliJ IDEA 2025.1 and newer.
+
 ## 2.2
 - The plugin is now compatible with IntelliJ IDEA 2022.3-2024.3.
 
