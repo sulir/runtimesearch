@@ -5,7 +5,8 @@ plugins {
 refreshVersions {
     rejectVersionIf {
         @Suppress("UnstableApiUsage")
-        candidate.stabilityLevel != de.fayard.refreshVersions.core.StabilityLevel.Stable
+        (moduleId.group in listOf("org.junit.jupiter", "org.junit.platform") && candidate.value[0] > '5') ||
+            candidate.stabilityLevel != de.fayard.refreshVersions.core.StabilityLevel.Stable
     }
 }
 
