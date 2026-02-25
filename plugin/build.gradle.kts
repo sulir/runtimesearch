@@ -21,7 +21,7 @@ dependencies {
     }
 
     intellijPlatform {
-        intellijIdea("2025.3.2")
+        intellijIdea("2025.3.3")
         bundledPlugin("com.intellij.java")
         pluginVerifier()
     }
