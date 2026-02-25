@@ -6,6 +6,10 @@ plugins {
     id("fr.brouillard.oss.gradle.jgitver")
 }
 
+repositories {
+    maven("https://www.jetbrains.com/intellij-repository/releases")
+}
+
 jgitver {
     useDirty = true
 
