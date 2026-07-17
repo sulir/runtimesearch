@@ -16,6 +16,7 @@ import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebuggerManager;
@@ -88,7 +89,9 @@ public class RuntimeFindManager {
         }
 
         Executor debugExecutor = DefaultDebugExecutor.getDebugExecutorInstance();
-        ProgramRunnerUtil.executeConfiguration(selected, debugExecutor);
+        ApplicationManager.getApplication().runReadAction(() ->
+                ProgramRunnerUtil.executeConfiguration(selected, debugExecutor));
+
     }
 
     public void sendSearchText(XDebugSession session) {
