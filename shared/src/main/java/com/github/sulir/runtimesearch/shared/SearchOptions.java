@@ -11,6 +11,7 @@ public class SearchOptions implements Serializable {
     private static final String MATCH_CASE = PROPERTY_PREFIX + "case";
     private static final String WHOLE_WORDS = PROPERTY_PREFIX + "words";
     public static final String REGEX = PROPERTY_PREFIX + "regex";
+    public static final String[] properties = {TEXT, MATCH_CASE, WHOLE_WORDS, REGEX};
 
     private String text;
     private boolean matchCase;
@@ -88,9 +89,7 @@ public class SearchOptions implements Serializable {
     }
 
     public static void clearSystemProperties() {
-        for (String name : System.getProperties().stringPropertyNames()) {
-            if (name.startsWith(SearchOptions.PROPERTY_PREFIX))
-                System.clearProperty(name);
-        }
+        for (String property : properties)
+            System.clearProperty(property);
     }
 }
