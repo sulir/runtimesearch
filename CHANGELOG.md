@@ -1,5 +1,10 @@
 # RuntimeSearch
 
+## 2.4
+
+- Fixed read access error in newer IntelliJ versions.
+- Fixed class inclusion pattern being ignored.
+
 ## 2.3
 - Compatibility was set to IntelliJ IDEA 2025.1 and newer.
 
