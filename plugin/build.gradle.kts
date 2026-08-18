@@ -21,7 +21,7 @@ dependencies {
     }
 
     intellijPlatform {
-        intellijIdea("2025.3.3")
+        intellijIdea("2026.2.1")
         bundledPlugin("com.intellij.java")
         pluginVerifier()
     }
@@ -90,7 +90,6 @@ tasks.buildPlugin {
 
 tasks.runIde {
     dependsOn(":runtimesearch-agent:jar")
-    jvmArgs("-Didea.load.plugins.id=com.github.sulir.runtimesearch")
 }
 
 tasks.clean {
